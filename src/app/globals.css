@@ -1,0 +1,227 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Animations */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes type-in {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Animation Classes */
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.typing-animation {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: type-in 4s steps(60, end);
+  animation-fill-mode: forwards;
+}
+
+@layer base {
+  :root {
+    /* Backgrounds */
+    --background: 210 20% 98%;
+    --foreground: 222 15% 10%;
+
+    /* ✅ Brand Colors (from BizHacks logo) */
+    --primary: 222 85% 24%;          /* Deep Navy Blue - main logo color */
+    --primary-dark: 222 85% 20%;
+    --primary-light: 222 85% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 75% 40%;        /* Lighter Royal Blue accent */
+    --secondary-dark: 217 75% 32%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Accent and Muted */
+    --accent: 217 85% 96%;
+    --accent-foreground: 222 85% 24%;
+    --muted: 220 10% 94%;
+    --muted-foreground: 222 15% 45%;
+
+    /* Gradients (matching logo feel) */
+    --gradient-from: 222 85% 24%;
+    --gradient-to: 217 75% 40%;
+
+    /* Others */
+    --border: 220 12% 88%;
+    --input: 220 12% 88%;
+    --ring: 222 85% 24%;
+
+    /* Sidebar (optional if using sidebar UI) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 222 10% 15%;
+    --sidebar-primary: 222 85% 24%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 217 85% 95%;
+    --sidebar-accent-foreground: 222 85% 24%;
+  }
+}
+
+
+/* Components Layer */
+@layer components {
+  .container {
+    @apply mx-auto;
+  }
+
+  /* Hero Badge */
+ .hero-badge {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm ring-1 ring-offset-2 ring-primary/40;
+  background-color: hsl(var(--hero-badge-bg));
+  border: 1px solid hsl(var(--hero-badge-border));
+  color: hsl(var(--hero-badge-text));
+}
+
+  
+  .hero-badge-icon {
+    color: hsl(var(--primary));
+  }
+  
+  /* Gradient Text */
+.gradient-text {
+ background: linear-gradient(to right, hsl(var(--primary)), #000000);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+  
+  /* Trust Icons */
+  .trust-icon {
+    color: hsl(var(--primary));
+  }
+  
+  /* Logo Gradient Box */
+  .logo-gradient-box {
+    background: linear-gradient(135deg, hsl(var(--gradient-from)) 0%, hsl(var(--gradient-to)) 100%);
+    @apply rounded-lg flex items-center justify-center;
+  }
+  
+  /* Navigation Links */
+  .nav-link {
+    @apply relative transition-all duration-300 font-medium;
+    color: hsl(var(--foreground) / 0.8);
+  }
+  
+  .nav-link:hover {
+    color: hsl(var(--primary));
+  }
+  
+  .nav-link-underline {
+    @apply absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-500;
+    background-color: hsl(var(--primary));
+  }
+  
+  .nav-link:hover .nav-link-underline {
+    @apply w-full;
+  }
+  
+  /* Navigation Dropdown - COMPLETE STYLES */
+ .nav-dropdown {
+  @apply rounded-xl shadow-lg border backdrop-blur-md;
+  background-color: hsl(0 0% 100% / 0.95); /* white base with transparency */
+  border-color: hsl(var(--border));
+  overflow: hidden;
+}
+
+.nav-dropdown-item {
+  @apply block px-4 py-3 text-sm font-medium transition-all duration-200;
+  color: hsl(var(--foreground) / 0.85);
+}
+
+.nav-dropdown-item:hover {
+  background-color: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+
+  
+  .btn-primary-custom {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  @apply rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 will-change-transform !important;
+}
+
+  
+  .btn-primary-custom:hover {
+    background-color: hsl(var(--primary-dark));
+    @apply scale-105;
+  }
+  
+  .btn-primary-custom:active {
+    @apply scale-95;
+  }
+  
+  /* Header Backgrounds */
+  .header-bg {
+    @apply bg-background/95 backdrop-blur-xl border-b;
+    border-color: hsl(var(--border) / 0.5);
+  }
+  
+  /* globals.css me ye check kar lein */
+.header-bg-scrolled {
+  @apply rounded-full shadow-lg bg-white;
+  box-shadow: 0 8px 32px hsla(var(--primary) / 0.12);
+  border-color: hsl(var(--border) / 0.5);
+}
+  
+  /* Progress Bar */
+  .header-progress-bar {
+    @apply h-0.5;
+    background: linear-gradient(to right, transparent, hsl(var(--primary)), transparent);
+  }
+  
+  /* Mobile Menu */
+  .mobile-menu-bg {
+    @apply rounded-3xl shadow-2xl border backdrop-blur-xl;
+    background-image: linear-gradient(to bottom right, hsl(var(--background)), hsl(var(--background)), hsl(var(--accent) / 0.05));
+    border-color: hsl(var(--border) / 0.5);
+  }
+  
+  .mobile-menu-top-bar {
+    background: linear-gradient(to right, hsl(var(--primary) / 0.5), hsl(var(--primary)), hsl(var(--secondary) / 0.5));
+    @apply h-1;
+  }
+}
+
+/* Utilities Layer */
+@layer utilities {
+  .dotted-grid {
+    background-image: radial-gradient(circle at 1px 1px, hsl(var(--border)) 0.5px, transparent 0);
+    background-size: 20px 20px;
+  }
+  
+  .dot-grid-base {
+    color: hsl(var(--dot-grid-base));
+  }
+  
+  .dot-grid-active {
+    color: hsl(var(--dot-grid-active));
+  }
+}

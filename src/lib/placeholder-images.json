@@ -1,0 +1,64 @@
+{
+  "placeholderImages": [
+    {
+      "id": "dashboard-preview-hero",
+      "description": "A preview of the Freight Sync dashboard showing analytics, used in the hero section.",
+      "imageUrl": "https://res.cloudinary.com/drkcbqauq/image/upload/v1760352078/WhatsApp_Image_2025-10-13_at_11.31.08_AM_gpmrc6.jpg",
+      "imageHint": "dashboard analytics"
+    },
+    {
+      "id": "dashboard-main-preview",
+      "description": "A full-width preview of the FreightSync dashboard.",
+      "imageUrl": "https://storage.googleapis.com/gemini-studio-assets/freightsync/dashboard.png",
+      "imageHint": "dashboard overview"
+    },
+    {
+      "id": "blog-featured-post",
+      "description": "Image for the featured blog post.",
+      "imageUrl": "https://picsum.photos/seed/blog-featured/1200/600",
+      "imageHint": "logistics transportation"
+    },
+    {
+      "id": "blog-post-1",
+      "description": "Image for the first blog post.",
+      "imageUrl": "https://picsum.photos/seed/blog-1/600/400",
+      "imageHint": "truck highway"
+    },
+    {
+      "id": "blog-post-2",
+      "description": "Image for the second blog post.",
+      "imageUrl": "https://picsum.photos/seed/blog-2/600/400",
+      "imageHint": "warehouse logistics"
+    },
+    {
+      "id": "blog-post-3",
+      "description": "Image for the third blog post.",
+      "imageUrl": "https://picsum.photos/seed/blog-3/600/400",
+      "imageHint": "shipping containers"
+    },
+    {
+      "id": "about-hero",
+      "description": "A group of team members collaborating in a modern office.",
+      "imageUrl": "https://picsum.photos/seed/teamwork/1200/800",
+      "imageHint": "team collaboration"
+    },
+    {
+      "id": "team-rohan",
+      "description": "Portrait of Rohan Singh.",
+      "imageUrl": "https://picsum.photos/seed/rohan/400/400",
+      "imageHint": "male portrait"
+    },
+    {
+      "id": "team-aditi",
+      "description": "Portrait of Aditi Sharma.",
+      "imageUrl": "https://picsum.photos/seed/aditi/400/400",
+      "imageHint": "female portrait"
+    },
+    {
+      "id": "careers-hero",
+      "description": "A diverse and happy team working in a modern office environment.",
+      "imageUrl": "https://picsum.photos/seed/careers/1200/500",
+      "imageHint": "diverse team"
+    }
+  ]
+}
