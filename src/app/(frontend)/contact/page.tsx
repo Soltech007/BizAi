@@ -146,16 +146,23 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
 
     const data = await response.json();
-    console.log("Server Response:", data);
 
     if (response.ok) {
-      toast.success("Lead created successfully in ERPNext!");
+    toast.success("Data Sent Successfully", {
+  position: "bottom-center",
+  icon: "✅",
+  style: {
+    background: "#111827",
+    color: "#fff",
+    borderRadius: "8px",
+  },
+});
+
       setFormData(initialFormState);
     } else {
       toast.error(data._server_messages || data.error || "Failed to create lead.");
     }
   } catch (error) {
-    console.error("Error submitting form:", error);
     toast.error("Something went wrong. Try again later.");
   } finally {
     setLoading(false);

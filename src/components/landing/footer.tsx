@@ -214,11 +214,13 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-accent/50 border-border focus:border-primary focus:ring-primary"
+                id="new"
               />
               <Button
                 type="submit"
                 className="w-full btn-primary-custom hover:bg-primary/90 mt-3"
                 disabled={loading}
+                  id="news"
               >
                 {loading ? "Subscribing..." : "Subscribe"}
               </Button>
