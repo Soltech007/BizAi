@@ -35,17 +35,9 @@ const footerLinks = {
 
 const socialLinks = [
   { name: "Twitter", href: "#", Icon: Twitter },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/company/bizaihacks/",
-    Icon: Linkedin,
-  },
+  { name: "LinkedIn", href: "https://www.linkedin.com/company/bizaihacks/", Icon: Linkedin },
   { name: "Instagram", href: "#", Icon: FaInstagram },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/bizaihacks/",
-    Icon: FaFacebook,
-  },
+  { name: "Facebook", href: "https://www.facebook.com/bizaihacks/", Icon: FaFacebook },
 ];
 
 export default function Footer() {
@@ -73,15 +65,7 @@ export default function Footer() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Subscribed successfully 🎉", {
-          position: "bottom-center",
-          icon: "✅",
-          style: {
-            background: "#111827",
-            color: "#fff",
-            borderRadius: "8px",
-          },
-        });
+        toast.success("Subscribed successfully 🎉",);
         setEmail("");
       } else {
         toast.error(data.error || "Failed to subscribe");
@@ -124,17 +108,14 @@ export default function Footer() {
               className="text-sm max-w-xs leading-relaxed"
               style={{ color: "hsl(var(--muted-foreground))" }}
             >
-              Making AI accessible, secure, and measurable for business teams —
-              delivering fast ROI, low friction, and strong governance.
+              Making AI accessible, secure, and measurable for business teams — delivering fast ROI,
+              low friction, and strong governance.
             </p>
 
             {/* Contact Info */}
             <div className="space-y-2 pt-2">
               <div className="flex items-center gap-2 text-sm">
-                <Phone
-                  className="h-4 w-4"
-                  style={{ color: "hsl(var(--primary))" }}
-                />
+                <Phone className="h-4 w-4" style={{ color: "hsl(var(--primary))" }} />
                 <a
                   href="tel:+919023506084"
                   className="hover:text-primary transition-colors"
@@ -145,10 +126,7 @@ export default function Footer() {
               </div>
 
               <div className="flex items-center gap-2 text-sm">
-                <Mail
-                  className="h-4 w-4"
-                  style={{ color: "hsl(var(--primary))" }}
-                />
+                <Mail className="h-4 w-4" style={{ color: "hsl(var(--primary))" }} />
                 <a
                   href="mailto:contact@bizaihacks.com"
                   className="hover:text-primary transition-colors"
@@ -159,13 +137,9 @@ export default function Footer() {
               </div>
 
               <div className="flex items-start gap-2 text-sm">
-                <MapPin
-                  className="h-4 w-4 mt-0.5"
-                  style={{ color: "hsl(var(--primary))" }}
-                />
+                <MapPin className="h-4 w-4 mt-0.5" style={{ color: "hsl(var(--primary))" }} />
                 <span style={{ color: "hsl(var(--muted-foreground))" }}>
-                  Vibrant Park, Survey No. 182 <br /> Near NH 8 GIDC Phase 1,{" "}
-                  <br />
+                  Vibrant Park, Survey No. 182 <br /> Near NH 8 GIDC Phase 1, <br />
                   Vapi, Gujarat - 396195, India
                 </span>
               </div>
@@ -246,7 +220,7 @@ export default function Footer() {
                 type="submit"
                 className="w-full btn-primary-custom hover:bg-primary/90 mt-3"
                 disabled={loading}
-                id="news"
+                  id="news"
               >
                 {loading ? "Subscribing..." : "Subscribe"}
               </Button>
@@ -261,10 +235,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div
-          className="my-8 md:my-12 border-t"
-          style={{ borderColor: "hsl(var(--border))" }}
-        />
+        <div className="my-8 md:my-12 border-t" style={{ borderColor: "hsl(var(--border))" }} />
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
@@ -279,28 +250,16 @@ export default function Footer() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            <Link
-              href="/privacypolicy"
-              className="hover:text-primary transition-colors"
-            >
+            <Link href="/privacypolicy" className="hover:text-primary transition-colors">
               Privacy Policy
             </Link>
-            <Link
-              href="/termsandconditions"
-              className="hover:text-primary transition-colors"
-            >
+            <Link href="/termsandconditions" className="hover:text-primary transition-colors">
               Terms of Service
             </Link>
-            <Link
-              href="/disclaimer"
-              className="hover:text-primary transition-colors"
-            >
+            <Link href="/disclaimer" className="hover:text-primary transition-colors">
               Disclaimer
             </Link>
-            <Link
-              href="/cookiepolicy"
-              className="hover:text-primary transition-colors"
-            >
+            <Link href="/cookiepolicy" className="hover:text-primary transition-colors">
               Cookies Policy
             </Link>
           </div>
