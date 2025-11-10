@@ -34,18 +34,61 @@ const employeeRanges = [
 ];
 
 const industries = [
-  "Accounting", "Advertising", "Aerospace", "Agriculture", "Airline", "Apparel & Accessories",
-  "Automotive", "Banking", "Biotechnology", "Broadcasting", "Brokerage", "Chemical",
-  "Computer", "Consulting", "Consumer Products", "Cosmetics", "Defense", "Department Stores",
-  "Education", "Electronics", "Energy", "Entertainment & Leisure", "Executive Search",
-  "Financial Services", "Food, Beverage & Tobacco", "Grocery", "Health Care", "Internet Publishing",
-  "Investment Banking", "Legal", "Manufacturing", "Music", "Newspaper Publishers", "Online Auctions",
-  "Pension Funds", "Pharmaceuticals", "Private Equity", "Publishing", "Real Estate",
-  "Retail & Wholesale", "Securities & Commodity Exchanges", "Service", "Soap & Detergent",
-  "Software", "Sports", "Technology", "Telecommunications", "Television", "Transportation",
-  "Venture Capital", "Society", "Construction", "Hotel", "Logistics & Warehousing",
-].map(ind => ({ value: ind, label: ind }));
-
+  "Accounting",
+  "Advertising",
+  "Aerospace",
+  "Agriculture",
+  "Airline",
+  "Apparel & Accessories",
+  "Automotive",
+  "Banking",
+  "Biotechnology",
+  "Broadcasting",
+  "Brokerage",
+  "Chemical",
+  "Computer",
+  "Consulting",
+  "Consumer Products",
+  "Cosmetics",
+  "Defense",
+  "Department Stores",
+  "Education",
+  "Electronics",
+  "Energy",
+  "Entertainment & Leisure",
+  "Executive Search",
+  "Financial Services",
+  "Food, Beverage & Tobacco",
+  "Grocery",
+  "Health Care",
+  "Internet Publishing",
+  "Investment Banking",
+  "Legal",
+  "Manufacturing",
+  "Music",
+  "Newspaper Publishers",
+  "Online Auctions",
+  "Pension Funds",
+  "Pharmaceuticals",
+  "Private Equity",
+  "Publishing",
+  "Real Estate",
+  "Retail & Wholesale",
+  "Securities & Commodity Exchanges",
+  "Service",
+  "Soap & Detergent",
+  "Software",
+  "Sports",
+  "Technology",
+  "Telecommunications",
+  "Television",
+  "Transportation",
+  "Venture Capital",
+  "Society",
+  "Construction",
+  "Hotel",
+  "Logistics & Warehousing",
+].map((ind) => ({ value: ind, label: ind }));
 
 const marketSegments = [
   { value: "enterprise", label: "Enterprise" },
@@ -120,57 +163,57 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormState);
 
-
   const heroRef = useRef(null);
   const formRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true, amount: 0.3 });
   const formInView = useInView(formRef, { once: true, amount: 0.1 });
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  if (!formData.firstName || !formData.email) {
-    toast.error("Please fill in all required fields.");
-    return;
-  }
-
-  setLoading(true);
-  const loadingToast = toast.loading("Sending your message...");
-
-  try {
-    // call our server-side API route
-    const response = await fetch("/api/send-lead", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-    toast.success("Data Sent Successfully", {
-  position: "bottom-center",
-  icon: "✅",
-  style: {
-    background: "#111827",
-    color: "#fff",
-    borderRadius: "8px",
-  },
-});
-
-      setFormData(initialFormState);
-    } else {
-      toast.error(data._server_messages || data.error || "Failed to create lead.");
+    if (!formData.firstName || !formData.email) {
+      toast.error("Please fill in all required fields.");
+      return;
     }
-  } catch (error) {
-    toast.error("Something went wrong. Try again later.");
-  } finally {
-    setLoading(false);
-    toast.dismiss(loadingToast);
-  }
-};
 
+    setLoading(true);
+    const loadingToast = toast.loading("Sending your message...");
 
+    try {
+      // call our server-side API route
+      const response = await fetch("/api/send-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success("Data Sent Successfully", {
+          position: "top-center",
+          icon: "✅",
+          style: {
+            background: `btn-primary-custom`,
+            marginTop: "50px",
+            color: `hsl(var(--foreground))`,
+            borderRadius: "8px",
+          },
+        });
+
+        setFormData(initialFormState);
+      } else {
+        toast.error(
+          data._server_messages || data.error || "Failed to create lead."
+        );
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Try again later.");
+    } finally {
+      setLoading(false);
+      toast.dismiss(loadingToast);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -390,9 +433,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                             disabled={loading}
                           />
                         </div>
-                     
                       </div>
-
                     </div>
 
                     {/* Organization Information Section */}
@@ -445,7 +486,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                             ))}
                           </select>
                         </div>
-                      
                       </div>
 
                       {/* Industry & Market Segment */}
@@ -475,10 +515,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                             ))}
                           </select>
                         </div>
-                       
                       </div>
-
-                  
                     </div>
 
                     {/* Inquiry Details Section */}
@@ -679,8 +716,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground">
-                    Vibrant  Park,  Survey No. 182 <br /> Near NH 8, GIDC Phase 1, <br/>
-                 Vapi, Gujarat - 396195, India
+                      Vibrant Park, Survey No. 182 <br /> Near NH 8, GIDC Phase
+                      1, <br />
+                      Vapi, Gujarat - 396195, India
                     </p>
                   </CardContent>
                 </Card>
