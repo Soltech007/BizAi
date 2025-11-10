@@ -275,7 +275,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <form className="space-y-6">
+                  <form className="space-y-6" onSubmit={handleSubmit}>
                     {/* Personal Information Section */}
                     <div className="space-y-4">
                       <h3
