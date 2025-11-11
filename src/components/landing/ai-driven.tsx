@@ -79,7 +79,7 @@ export function InfiniteMovingCardsDemo() {
 
           {/* Main Heading */}
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-headline font-bold mb-6">
-            What Our{" "}
+            What {" "}
             <span 
               className="gradient-text relative inline-block"
               style={{
@@ -98,7 +98,7 @@ export function InfiniteMovingCardsDemo() {
             className="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            Real success stories from businesses that transformed their operations with{" "}
+            Real success stories from businesses that transformed their operations with{" "} <br className="hidden md:flex" />
             <span className="font-semibold" style={{ color: "hsl(var(--foreground))" }}>
               BizAI Hacks
             </span>
