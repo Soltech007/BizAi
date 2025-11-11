@@ -18,6 +18,7 @@ const footerLinks = {
     { name: "Consultation", href: "/services/consultation" },
     { name: "Training", href: "/services/training" },
     { name: "Implementation", href: "/services/implementation" },
+    { name: "Became a channel partner", href: "/channelpartner" },
   ],
   Company: [
     { name: "About Us", href: "/about" },

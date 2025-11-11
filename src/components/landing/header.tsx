@@ -45,7 +45,7 @@ const navLinks = [
       { href: "/solutions/ecommerce", label: "E-Commerce & Retail" },
     ],
   },
-  { href: "/partnerships", label: "Partnerships" },
+  // { href: "/partnerships", label: "Partnerships" },
   { href: "/contact", label: "Contact" },
 ];
 // ------------------------------------------
@@ -112,7 +112,6 @@ export default function Header() {
                   <div key={link.label} className="relative py-4" onMouseEnter={() => link.hasDropdown && setActiveDropdown(link.label)} onMouseLeave={() => link.hasDropdown && setActiveDropdown(null)}>
                     {link.hasDropdown ? (
                       <>
-                        {/* --- ✅ FIX 1: डेस्कटॉप के लिए बटन को Link से रैप किया गया --- */}
                         <Link href={link.href || "#"} passHref>
                           <button className={`nav-link flex items-center gap-1 px-3 ${scrolled ? 'text-sm' : 'text-base'} ${headerLoaded ? 'opacity-100' : 'opacity-0 scale-95'}`} style={{ transitionDelay: headerLoaded ? `${300 + index * 50}ms` : '0ms', transform: headerLoaded ? 'scale(1)' : '' }}>
                             {link.label}
