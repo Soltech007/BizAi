@@ -1,0 +1,53 @@
+export async function GET() {
+  const baseUrl = 'https://bizaihacks.com';
+
+  const pages = [
+    '',
+    'about',
+    'products',
+    'aicallingagent',
+    'aiautomationchatbot',
+    'services',
+    'services/consultation',
+    'services/training',
+    'services/implementation',
+    'services/dataanalytics',
+    'solutions',
+    'solutions/chemical',
+    'solutions/realestate',
+    'solutions/automobile',
+    'solutions/healthcare',
+    'solutions/agriculture',
+    'solutions/logistics',
+    'solutions/banking',
+    'solutions/education',
+    'solutions/ecommerce',
+    'partnerships',
+    'contact'
+  ];
+
+  const urls = pages
+    .map((page) => {
+      const path = page.startsWith('/') ? page : `/${page}`;
+      return `
+        <url>
+          <loc>${baseUrl}${path}</loc>
+          <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+          <changefreq>${page === '' ? 'daily' : 'weekly'}</changefreq>
+          <priority>${page === '' ? '1.0' : '0.8'}</priority>
+        </url>
+      `;
+    })
+    .join('');
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    ${urls}
+  </urlset>`;
+
+  return new Response(sitemap, {
+    headers: {
+      'Content-Type': 'application/xml'
+    }
+  });
+}
