@@ -1,50 +1,103 @@
-export async function GET() {
-  const baseUrl = 'https://bizaihacks.com';
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://bizaihacks.com/</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
 
-  const pages = [
-    '',
-    'about',
-    'products',
-    'aicallingagent',
-    'aiautomationchatbot',
-    'services',
-    'services/consultation',
-    'services/training',
-    'services/implementation',
-    'services/dataanalytics',
-    'solutions',
-    'solutions/chemical',
-    'solutions/realestate',
-    'solutions/automobile',
-    'solutions/healthcare',
-    'solutions/agriculture',
-    'solutions/logistics',
-    'solutions/banking',
-    'solutions/education',
-    'solutions/ecommerce',
-    'partnerships',
-    'contact'
-  ];
+  <url>
+    <loc>https://bizaihacks.com/about</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
-  const urls = pages
-    .map((page) => {
-      const path = page.startsWith('/') ? page : `/${page}`;
-      return `
-        <url>
-          <loc>${baseUrl}${path}</loc>
-          <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-          <changefreq>${page === '' ? 'daily' : 'weekly'}</changefreq>
-          <priority>${page === '' ? '1.0' : '0.8'}</priority>
-        </url>`;
-    })
-    .join('');
+  <url>
+    <loc>https://bizaihacks.com/products</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`;
+  <url>
+    <loc>https://bizaihacks.com/aicallingagent</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
-  return new Response(sitemap.trim(), {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-    },
-  });
-}
+  <url>
+    <loc>https://bizaihacks.com/aiautomationchatbot</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/services</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/services/consultation</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/services/training</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/services/implementation</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/services/dataanalytics</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/solutions</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url><loc>https://bizaihacks.com/solutions/chemical</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/realestate</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/automobile</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/healthcare</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/agriculture</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/logistics</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/banking</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/education</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/ecommerce</loc></url>
+
+  <url>
+    <loc>https://bizaihacks.com/partnerships</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/contact</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
