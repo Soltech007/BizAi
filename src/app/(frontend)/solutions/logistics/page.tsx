@@ -4,20 +4,24 @@ import { notFound } from "next/navigation";
 export const metadata = {
   title: "AI Solutions for Logistics | BizAI Hacks",
   description:
-    "Streamline supply chain management and delivery operations with AI automation.",
+    "Optimize your logistics operations with AI-driven route optimization, predictive demand, and automation tools.",
+  alternates: { canonical: "https://bizaihacks.com/solutions/logistics" },
   openGraph: {
-    title: "Logistics AI Solutions | BizAI Hacks",
-    description: "Boost efficiency with intelligent logistics automation.",
+    title: "Logistics AI Automation | BizAI Hacks",
+    description:
+      "Enhance logistics efficiency through intelligent automation and predictive analytics.",
     url: "https://bizaihacks.com/solutions/logistics",
     images: [{ url: "https://bizaihacks.com/logo.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI for Logistics | BizAI Hacks",
-    description: "Optimize routes, reduce costs, and enhance efficiency with AI.",
+    title: "AI in Logistics | BizAI Hacks",
+    description:
+      "Streamline logistics and supply chain with AI-based analytics and optimization.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
 };
+
 
 export default function LogisticsPage() {
   const data = getIndustryBySlug("logistics");

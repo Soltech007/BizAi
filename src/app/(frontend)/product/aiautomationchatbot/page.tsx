@@ -3,20 +3,25 @@ import React from 'react'
 export const metadata = {
   title: "AI Automation Chatbot | BizAI Hacks",
   description:
-    "Deliver instant, intelligent responses with BizAI Hacks’ AI Automation Chatbot — designed for seamless customer and business communication.",
+    "Enhance customer service and sales automation using our AI Chatbot — powered by advanced NLP and GPT technologies.",
+  alternates: {
+    canonical: "https://bizaihacks.com/product/aiautomationchatbot",
+  },
   openGraph: {
-    title: "AI Chatbot for Business Automation",
-    description: "Transform support and sales with AI-powered chatbot automation.",
+    title: "AI Chatbot Automation | BizAI Hacks",
+    description:
+      "Deliver smart, human-like chat experiences with AI chatbots built for enterprises.",
     url: "https://bizaihacks.com/product/aiautomationchatbot",
     images: [{ url: "https://bizaihacks.com/logo.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Chatbot Automation | BizAI Hacks",
-    description: "Enhance customer experience with AI chatbot automation.",
+    title: "AI Chatbot | BizAI Hacks",
+    description: "Transform your business communication with automation.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
 };
+
 
 const Chatbot = () => {
   return (

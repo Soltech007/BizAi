@@ -3,21 +3,25 @@ import React from 'react'
 export const metadata = {
   title: "AI Calling Agent | BizAI Hacks",
   description:
-    "Automate your customer communication with BizAI Hacks' AI Calling Agent — powered by advanced speech synthesis and natural language understanding.",
+    "Automate customer communication using BizAI Hacks' AI Calling Agent powered by natural language and voice AI.",
+  alternates: {
+    canonical: "https://bizaihacks.com/product/aicallingagent",
+  },
   openGraph: {
-    title: "AI Calling Agent by BizAI Hacks",
+    title: "AI Calling Agent | BizAI Hacks",
     description:
-      "Enhance lead engagement and customer service using intelligent AI voice agents.",
+      "Boost sales and support with AI-powered voice agents that handle calls intelligently.",
     url: "https://bizaihacks.com/product/aicallingagent",
     images: [{ url: "https://bizaihacks.com/logo.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "AI Calling Agent | BizAI Hacks",
-    description: "AI voice technology built for customer engagement and automation.",
+    description: "Automate customer engagement with our AI voice solutions.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
 };
+
 
 const CallingAgent = () => {
   return (

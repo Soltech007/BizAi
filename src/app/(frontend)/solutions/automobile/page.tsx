@@ -4,20 +4,24 @@ import { notFound } from "next/navigation";
 export const metadata = {
   title: "AI Solutions for Automobile Industry | BizAI Hacks",
   description:
-    "Accelerate automotive innovation with AI for manufacturing, sales, and after-sales operations.",
+    "Revolutionize automobile manufacturing and sales with predictive maintenance, automation, and intelligent customer engagement.",
+  alternates: { canonical: "https://bizaihacks.com/solutions/automobile" },
   openGraph: {
-    title: "Automobile AI Solutions | BizAI Hacks",
-    description: "Driving automation across the automotive value chain.",
+    title: "Automotive AI Automation | BizAI Hacks",
+    description:
+      "Enhance automotive efficiency with predictive maintenance and AI automation.",
     url: "https://bizaihacks.com/solutions/automobile",
     images: [{ url: "https://bizaihacks.com/logo.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI for Automobile Industry | BizAI Hacks",
-    description: "AI automation that drives growth and efficiency.",
+    title: "AI in Automotive Industry | BizAI Hacks",
+    description:
+      "Smart AI tools for automobile manufacturing, supply chain, and sales.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
 };
+
 
 export default function AutomobilePage() {
   const data = getIndustryBySlug("automobile");

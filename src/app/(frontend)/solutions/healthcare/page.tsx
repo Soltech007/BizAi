@@ -4,20 +4,24 @@ import { notFound } from "next/navigation";
 export const metadata = {
   title: "AI Solutions for Healthcare | BizAI Hacks",
   description:
-    "Enhance patient care and operational efficiency with AI automation and analytics in healthcare.",
+    "Enhance patient care, diagnostics, and hospital automation with BizAI Hacks’ AI healthcare solutions.",
+  alternates: { canonical: "https://bizaihacks.com/solutions/healthcare" },
   openGraph: {
-    title: "Healthcare AI Solutions | BizAI Hacks",
-    description: "Revolutionizing healthcare through AI insights and automation.",
+    title: "Healthcare AI Automation | BizAI Hacks",
+    description:
+      "AI solutions for patient analytics, diagnosis, and operational efficiency in healthcare.",
     url: "https://bizaihacks.com/solutions/healthcare",
     images: [{ url: "https://bizaihacks.com/logo.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI for Healthcare | BizAI Hacks",
-    description: "Smarter healthcare powered by AI analytics and automation.",
+    title: "AI in Healthcare | BizAI Hacks",
+    description:
+      "Revolutionize healthcare operations and decision-making with AI.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
 };
+
 
 export default function HealthcarePage() {
   const data = getIndustryBySlug("healthcare");

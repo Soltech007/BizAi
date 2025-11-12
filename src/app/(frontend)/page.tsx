@@ -5,20 +5,23 @@ import ProductTestimonials from "@/components/landing/testimonials";
 import type { Metadata } from "next";
 
 export const metadata = {
-  title: "AI Services | BizAI Hacks",
+  title: "BizAI Hacks | Enterprise AI Solutions for Automation & Growth",
   description:
-    "Explore our range of AI-driven services — from consultation and implementation to data analytics and enterprise training.",
+    "BizAI Hacks helps businesses scale with AI automation — from chatbots and voice agents to intelligent data analytics. Partnered with IBM Watsonx and Eleven Labs.",
+  alternates: {
+    canonical: "https://bizaihacks.com/",
+  },
   openGraph: {
-    title: "BizAI Hacks AI Services",
+    title: "BizAI Hacks | AI Automation for Enterprises",
     description:
-      "Empowering enterprises through consultation, training, implementation, and analytics.",
-    url: "https://bizaihacks.com/services",
+      "Revolutionize your business operations with AI-driven automation and analytics from BizAI Hacks.",
+    url: "https://bizaihacks.com/",
     images: [{ url: "https://bizaihacks.com/logo.jpg" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Services | BizAI Hacks",
-    description: "Consultation, implementation, and analytics for AI transformation.",
+    title: "BizAI Hacks | Enterprise AI Automation",
+    description: "Power your business growth with next-gen AI solutions.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
 };

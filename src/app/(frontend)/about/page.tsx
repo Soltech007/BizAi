@@ -6,7 +6,10 @@ import AboutPage from '@/components/About/About'
 export const metadata = {
   title: "About Us | BizAI Hacks",
   description:
-    "Learn about BizAI Hacks, our mission to deliver scalable AI solutions for enterprise automation, and our partnership with IBM Watsonx & Eleven Labs.",
+    "Learn about BizAI Hacks, our mission to deliver scalable AI solutions for enterprise automation, and our partnerships with IBM Watsonx & Eleven Labs.",
+  alternates: {
+    canonical: "https://bizaihacks.com/about",
+  },
   openGraph: {
     title: "About BizAI Hacks",
     description: "Discover our story and commitment to AI transformation.",
