@@ -5,9 +5,9 @@ import ProductTestimonials from "@/components/landing/testimonials";
 import type { Metadata } from "next";
 
 export const metadata = {
-  title: "BizAI Hacks | Enterprise AI Solutions for Automation & Growth",
+  title: "BizAI Hacks | Enterprise AI Solutions ",
   description:
-    "BizAI Hacks helps businesses scale with AI automation — from chatbots and voice agents to intelligent data analytics. Partnered with IBM Watsonx and Eleven Labs.",
+    "BizAI Hacks helps businesses scale with AI automation — from chatbots and voice agents to intelligent data analytics.",
   alternates: {
     canonical: "https://bizaihacks.com/",
   },

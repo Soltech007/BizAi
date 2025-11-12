@@ -23,9 +23,6 @@ import { motion, useInView } from "framer-motion";
 import RequestQuote from "../../app/(frontend)/common/requestquote";
 import { set } from "date-fns";
 
-
-
-
 // Add these option arrays before the component
 const employeeRanges = [
   { value: "1-10", label: "1-10" },
@@ -343,6 +340,7 @@ export default function ContactPage() {
                         <div className="space-y-2">
                           <Label htmlFor="firstName">First Name *</Label>
                           <Input
+                            placeholder="First Name"
                             id="firstName"
                             value={formData.firstName}
                             onChange={(e) =>
@@ -359,6 +357,7 @@ export default function ContactPage() {
                           <Label htmlFor="lastName">Last Name</Label>
                           <Input
                             id="lastName"
+                            placeholder="Last Name"
                             value={formData.lastName}
                             onChange={(e) =>
                               setFormData({

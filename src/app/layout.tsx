@@ -3,8 +3,6 @@ import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
-
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://bizaihacks.com"),
   title: {
@@ -52,8 +50,6 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -78,9 +74,15 @@ export default function RootLayout({
         />
 
         {/* ✅ LLM & AI Crawlers Metadata */}
-        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
         <meta name="ai" content="friendly" />
-        <meta name="ai-description" content="AI-driven business automation and enterprise chatbots powered by IBM Watsonx & Eleven Labs." />
+        <meta
+          name="ai-description"
+          content="AI-driven business automation and enterprise chatbots powered by IBM Watsonx & Eleven Labs."
+        />
         <meta name="application-name" content="BizAI Hacks" />
         <meta name="theme-color" content="#000000" />
       </head>
@@ -89,6 +91,7 @@ export default function RootLayout({
         {/* ✅ Google Tag Manager (noscript fallback) */}
         <noscript>
           <iframe
+            title="bizaihacks"
             src="https://www.googletagmanager.com/ns.html?id=GTM-P7HL92HS"
             height="0"
             width="0"
