@@ -13,7 +13,6 @@ const footerLinks = {
   Product: [
     { name: "AI Calling Agent", href: "/product/aicallingagent" },
     { name: "AI Automation Chatbot", href: "/product/aiautomationchatbot" },
-    { name: "Became a channel partner", href: "/channelpartner" },
   ],
   Services: [
     { name: "Consultation", href: "/services/consultation" },
@@ -24,15 +23,16 @@ const footerLinks = {
   ],
   Company: [
     { name: "About Us", href: "/about" },
-    { name: "Careers", href: "/careers" },
+    { name: "Careers", href: "#" },
     { name: "Contact Us", href: "/contact" },
+    { name: "Became a channel partner", href: "#" },
     // { name: "Partnerships", href: "/partnerships" },
   ],
   Resources: [
-    { name: "Blog", href: "/blog" },
-    { name: "Case Studies", href: "/case-studies" },
-    { name: "Affiliate", href: "/affiliate" },
-    { name: "FAQs", href: "/faq" },
+    { name: "Blog", href: "#" },
+    { name: "Case Studies", href: "#" },
+    { name: "Affiliate", href: "#" },
+    { name: "FAQs", href: "#" },
   ],
 };
 
