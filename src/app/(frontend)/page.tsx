@@ -5,7 +5,7 @@ import ProductTestimonials from "@/components/landing/testimonials";
 import type { Metadata } from "next";
 
 export const metadata = {
-  title: "BizAI Hacks | Enterprise AI Solutions ",
+  title: "BizAI Hacks | Enterprise AI Solutions",
   description:
     "BizAI Hacks helps businesses scale with AI automation — from chatbots and voice agents to intelligent data analytics.",
   alternates: {
@@ -24,7 +24,13 @@ export const metadata = {
     description: "Power your business growth with next-gen AI solutions.",
     images: ["https://bizaihacks.com/logo.jpg"],
   },
+  icons: {
+    icon: "https://bizaihacks.com/logo.jpg", // or .png, .svg etc.
+    shortcut: "https://bizaihacks.com/logo.jpg",
+    apple: "https://bizaihacks.com/logo.jpg", // optional for iOS
+  },
 };
+
 
 
 // src/data/testimonials/calling-agent.ts
