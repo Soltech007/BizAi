@@ -27,7 +27,28 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import RequestQuote from "../common/requestquote";
+import RequestQuote from "../../app/(frontend)/common/requestquote";
+
+
+export const metadata = {
+  title: "AI Calling Agent | BizAI Hacks",
+  description:
+    "Automate customer interactions with our AI-powered calling agents. Improve efficiency, reduce costs, and enhance user experience with real-time voice automation.",
+  openGraph: {
+    title: "AI Calling Agent by BizAI Hacks",
+    description:
+      "Enhance customer engagement with advanced AI voice automation.",
+    url: "https://bizaihacks.com/aicallingagent",
+    images: [{ url: "https://bizaihacks.com/logo.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Calling Agent | BizAI Hacks",
+    description:
+      "Deploy intelligent voice agents that automate customer communication.",
+    images: ["https://bizaihacks.com/logo.jpg"],
+  },
+};
 
 const coreCapabilities = [
   {

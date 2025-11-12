@@ -2,6 +2,27 @@ import {InfiniteMovingCardsDemo} from "@/components/landing/ai-driven";
 import IndustrialSolutions from "@/components/landing/common-questions";
 import Hero from "@/components/landing/hero";
 import ProductTestimonials from "@/components/landing/testimonials";
+import type { Metadata } from "next";
+
+export const metadata = {
+  title: "AI Services | BizAI Hacks",
+  description:
+    "Explore our range of AI-driven services — from consultation and implementation to data analytics and enterprise training.",
+  openGraph: {
+    title: "BizAI Hacks AI Services",
+    description:
+      "Empowering enterprises through consultation, training, implementation, and analytics.",
+    url: "https://bizaihacks.com/services",
+    images: [{ url: "https://bizaihacks.com/logo.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Services | BizAI Hacks",
+    description: "Consultation, implementation, and analytics for AI transformation.",
+    images: ["https://bizaihacks.com/logo.jpg"],
+  },
+};
+
 
 // src/data/testimonials/calling-agent.ts
 export const callingAgentTestimonials = [

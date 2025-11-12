@@ -11,11 +11,11 @@ const navLinks = [
   { href: "/about", label: "About" },
   {
     label: "Products",
-    // href: "/products",
+    // href: "/product",
     hasDropdown: true,
     dropdownItems: [
-      { href: "/aicallingagent", label: "AI Calling Agent" },
-      { href: "/aiautomationchatbot", label: "AI Automation Chatbot" },
+      { href: "/product/aicallingagent", label: "AI Calling Agent" },
+      { href: "/product/aiautomationchatbot", label: "AI Automation Chatbot" },
     ],
   },
   {

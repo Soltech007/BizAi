@@ -1,0 +1,6 @@
+# llms.txt for https://bizaihacks.com/
+
+Domain: bizaihacks.com
+Owner: BizAI Hacks
+Contact: contact@bizaihacks.com
+Description: BizAI Hacks provides enterprise-grade AI chatbot, AI calling, and voice automation solutions powered by IBM Watsonx & Eleven Labs.

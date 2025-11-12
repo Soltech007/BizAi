@@ -1,14 +1,58 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { Toaster } from "react-hot-toast";
 import Script from "next/script";
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
+
+
 
 export const metadata: Metadata = {
-  title: 'BizAI Hacks - Enterprise AI Solutions | AI Chatbot & Voice Automation',
-  description: 'Deploy production-ready AI solutions with IBM Watsonx & Eleven Labs. We help mid-market and enterprise teams accelerate business outcomes with pragmatic AI through consultation, training, and implementation services.',
-  keywords: 'enterprise AI solutions, AI chatbot, AI voice automation, AI calling agent, IBM Watsonx, Eleven Labs, AI consulting, CRM integration, ERP integration, contact center automation, conversational AI, Telecom AI, BFSI AI, Healthcare AI',
-  icons: '/logo.jpg',
+  metadataBase: new URL("https://bizaihacks.com"),
+  title: {
+    default: "BizAI Hacks | Digital Solutions for Businesses",
+    template: "%s | BizAI Hacks",
+  },
+  description:
+    "BizAI Hacks helps businesses transform digitally through AI-powered websites, apps, and automation solutions.",
+  keywords: [
+    "AI",
+    "Digital Solutions",
+    "Business Automation",
+    "Web Development",
+    "Next.js",
+    "BizAI Hacks",
+  ],
+  openGraph: {
+    title: "BizAI Hacks - Digital Solutions for Businesses",
+    description:
+      "Empowering businesses with smart digital transformation using AI and modern web technologies.",
+    url: "https://bizaihacks.com",
+    siteName: "BizAI Hacks",
+    images: [
+      {
+        url: "https://bizaihacks.com/logo.jpg",
+        width: 1200,
+        height: 630,
+        alt: "BizAI Hacks Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BizAI Hacks | Digital Solutions for Businesses",
+    description:
+      "BizAI Hacks empowers businesses with AI-driven web and app solutions.",
+    images: ["https://bizaihacks.com/logo.jpg"],
+    creator: "@bizaihacks",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  manifest: "/site.webmanifest",
 };
+
+
 
 export default function RootLayout({
   children,
@@ -32,10 +76,17 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* ✅ LLM & AI Crawlers Metadata */}
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta name="ai" content="friendly" />
+        <meta name="ai-description" content="AI-driven business automation and enterprise chatbots powered by IBM Watsonx & Eleven Labs." />
+        <meta name="application-name" content="BizAI Hacks" />
+        <meta name="theme-color" content="#000000" />
       </head>
 
       <body className="font-body antialiased">
-        {/* ✅ Google Tag Manager (noscript) */}
+        {/* ✅ Google Tag Manager (noscript fallback) */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-P7HL92HS"
@@ -45,9 +96,10 @@ export default function RootLayout({
           ></iframe>
         </noscript>
 
+        {/* Page Content */}
         {children}
 
-        {/* Toast Notifications */}
+        {/* ✅ Toast Notifications */}
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>

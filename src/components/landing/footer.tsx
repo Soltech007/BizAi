@@ -11,20 +11,22 @@ import toast from "react-hot-toast";
 
 const footerLinks = {
   Product: [
-    { name: "AI Calling Agent", href: "/products/ai-calling-agent" },
-    { name: "AI Automation Chatbot", href: "/products/ai-chatbot" },
+    { name: "AI Calling Agent", href: "/product/aicallingagent" },
+    { name: "AI Automation Chatbot", href: "/product/aiautomationchatbot" },
+    { name: "Became a channel partner", href: "/channelpartner" },
   ],
   Services: [
     { name: "Consultation", href: "/services/consultation" },
     { name: "Training", href: "/services/training" },
+    { name: "Data-Analyst", href: "/services/dataanalytics" },
     { name: "Implementation", href: "/services/implementation" },
-    { name: "Became a channel partner", href: "/channelpartner" },
+    
   ],
   Company: [
     { name: "About Us", href: "/about" },
     { name: "Careers", href: "/careers" },
     { name: "Contact Us", href: "/contact" },
-    { name: "Partnerships", href: "/partnerships" },
+    // { name: "Partnerships", href: "/partnerships" },
   ],
   Resources: [
     { name: "Blog", href: "/blog" },

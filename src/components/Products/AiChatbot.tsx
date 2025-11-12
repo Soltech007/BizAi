@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import RequestQuote from "../common/requestquote";
+import RequestQuote from "../../app/(frontend)/common/requestquote";
 import { FaFacebook, FaSlackHash, FaWhatsapp } from "react-icons/fa";
 import { TbApi } from "react-icons/tb";
 const coreCapabilities = [
