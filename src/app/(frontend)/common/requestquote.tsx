@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 const RequestQuote = () => {
@@ -63,16 +64,18 @@ const RequestQuote = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
+                <Link href="/contact">
                 <Button className="btn-primary-custom h-11 px-8 text-base">
                   For Inquiry
                   <motion.span
                     className="inline-block ml-2"
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                  >
+                    >
                     <ArrowRight className="w-4 h-4" />
                   </motion.span>
                 </Button>
+                    </Link>
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05 }}
