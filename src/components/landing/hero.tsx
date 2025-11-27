@@ -115,7 +115,7 @@ export default function Hero() {
                 asChild
                 className="h-12 sm:h-13 lg:h-14 px-6 sm:px-8 lg:px-10 text-sm sm:text-base lg:text-lg btn-primary-custom w-full sm:w-auto"
               >
-                <Link href="/aicallingagent">Explore AI Products</Link>
+                <Link href="/product/aicallingagent">Explore AI Products</Link>
               </Button>
             </div>
 

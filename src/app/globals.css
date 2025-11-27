@@ -152,13 +152,13 @@
 }
 
 .nav-dropdown-item {
-  @apply block px-4 py-3 text-sm font-medium transition-all duration-200;
+  @apply block px-4 py-3 text-sm font-medium transition-all duration-200 bg-white;
   color: hsl(var(--foreground) / 0.85);
 }
 
 .nav-dropdown-item:hover {
-  background-color: hsl(var(--primary) / 0.1);
-  color: hsl(var(--primary));
+  background-color: hsl(var(--primary) / 0.75);
+  color: white;
 }
 
   
@@ -223,5 +223,18 @@
   
   .dot-grid-active {
     color: hsl(var(--dot-grid-active));
+  }
+}
+
+
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

@@ -16,6 +16,10 @@ const navLinks = [
     dropdownItems: [
       { href: "/product/aicallingagent", label: "AI Calling Agent" },
       { href: "/product/aiautomationchatbot", label: "AI Automation Chatbot" },
+      { href: "/product/humanresource", label: "AI For Human Resources" },
+      { href: "/product/sales", label: "AI For Sales" },
+      { href: "/product/procurement", label: "AI For Procurement" },
+      { href: "/product/customersupport", label: "AI For Customer Support" },
     ],
   },
   {

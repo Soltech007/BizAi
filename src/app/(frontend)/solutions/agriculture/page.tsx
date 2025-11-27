@@ -1,6 +1,7 @@
 import IndustrySolutionPage from "@/components/Solutions/IndustrySolutionPage";
 import { getIndustryBySlug } from "@/data/industry-solutions-detailed";
 import { notFound } from "next/navigation";
+
 export const metadata = {
   title: "AI Solutions for Agriculture | BizAI Hacks",
   description:

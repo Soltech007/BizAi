@@ -314,7 +314,7 @@ export default function IndustrySolutionPage({ data }: IndustrySolutionPageProps
                 <CardHeader className="bg-gradient-to-r" style={{ background: `linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 100%)` }}>
                   <div className="flex items-center gap-4">
                     <div className=" hidden md:flex w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm  items-center justify-center">
-                      {/* <MessageSquare className="w-14 h-8 text-white" /> */}
+                      <MessageSquare className="w-14 h-8 text-white" />
                     </div>
                     <div>
                       <CardTitle className="text-2xl md:text-3xl text-white">

@@ -25,7 +25,7 @@ const footerLinks = {
     { name: "About Us", href: "/about" },
     { name: "Careers", href: "#" },
     { name: "Contact Us", href: "/contact" },
-    { name: "Became a channel partner", href: "#" },
+    { name: "Became a channel partner", href: "/partner" },
     // { name: "Partnerships", href: "/partnerships" },
   ],
   Resources: [

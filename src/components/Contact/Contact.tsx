@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,9 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
-// import { supabase } from "@/lib/supabase"; // Make sure this path is correct
 import RequestQuote from "../../app/(frontend)/common/requestquote";
-import { set } from "date-fns";
 
 // Add these option arrays before the component
 const employeeRanges = [
@@ -89,6 +87,48 @@ const industries = [
   "Hotel",
   "Logistics & Warehousing",
 ].map((ind) => ({ value: ind, label: ind }));
+
+// State and City Data
+const statesAndCities: { [key: string]: string[] } = {
+  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Tirupati", "Rajahmundry", "Kakinada", "Kadapa", "Anantapur"],
+  "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang", "Ziro", "Bomdila"],
+  "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Bongaigaon"],
+  "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Darbhanga", "Purnia", "Arrah", "Begusarai"],
+  "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Durg", "Rajnandgaon", "Jagdalpur"],
+  "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Bicholim"],
+  "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Vapi", "Navsari", "Bharuch", "Anand", "Morbi", "Mehsana", "Junagadh"],
+  "Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Karnal", "Hisar", "Rohtak", "Sonipat", "Yamunanagar"],
+  "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala", "Kullu", "Solan", "Mandi", "Palampur", "Baddi"],
+  "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh", "Deoghar", "Giridih"],
+  "Karnataka": ["Bengaluru", "Mysuru", "Mangaluru", "Hubli", "Belgaum", "Dharwad", "Gulbarga", "Davangere", "Shimoga"],
+  "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kannur", "Kollam", "Palakkad", "Alappuzha"],
+  "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar", "Rewa", "Satna", "Dewas"],
+  "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad", "Thane", "Navi Mumbai", "Kolhapur", "Solapur", "Amravati", "Sangli"],
+  "Manipur": ["Imphal", "Thoubal", "Bishnupur", "Churachandpur", "Kakching"],
+  "Meghalaya": ["Shillong", "Tura", "Jowai", "Nongstoin", "Williamnagar"],
+  "Mizoram": ["Aizawl", "Lunglei", "Champhai", "Serchhip", "Kolasib"],
+  "Nagaland": ["Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha"],
+  "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur", "Puri", "Balasore"],
+  "Punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Pathankot"],
+  "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Bikaner", "Ajmer", "Alwar", "Bharatpur", "Sikar"],
+  "Sikkim": ["Gangtok", "Namchi", "Gyalshing", "Mangan", "Ravangla"],
+  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Erode", "Vellore", "Thoothukudi"],
+  "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam", "Secunderabad", "Ramagundam"],
+  "Tripura": ["Agartala", "Udaipur", "Dharmanagar", "Kailashahar", "Belonia"],
+  "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Prayagraj", "Noida", "Ghaziabad", "Meerut", "Bareilly", "Aligarh", "Moradabad"],
+  "Uttarakhand": ["Dehradun", "Haridwar", "Rishikesh", "Nainital", "Mussoorie", "Roorkee", "Haldwani", "Rudrapur"],
+  "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri", "Darjeeling", "Kharagpur", "Haldia"],
+  "Delhi": ["New Delhi", "Central Delhi", "South Delhi", "North Delhi", "East Delhi", "West Delhi"],
+  "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Kathua", "Udhampur"],
+  "Ladakh": ["Leh", "Kargil"],
+  "Puducherry": ["Puducherry", "Karaikal", "Mahe", "Yanam"],
+  "Chandigarh": ["Chandigarh"],
+  "Andaman and Nicobar Islands": ["Port Blair", "Diglipur", "Rangat"],
+  "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa"],
+  "Lakshadweep": ["Kavaratti", "Agatti", "Minicoy"],
+};
+
+const statesList = Object.keys(statesAndCities).sort();
 
 const marketSegments = [
   { value: "enterprise", label: "Enterprise" },
@@ -159,14 +199,60 @@ export default function ContactPage() {
     territory: "",
     reason: "",
     message: "",
+    state: "",
+    city: "",
   };
+  
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormState);
+  
+  // State for custom input handling
+  const [showCustomState, setShowCustomState] = useState(false);
+  const [showCustomCity, setShowCustomCity] = useState(false);
+  const [customState, setCustomState] = useState("");
+  const [customCity, setCustomCity] = useState("");
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
 
   const heroRef = useRef(null);
   const formRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true, amount: 0.3 });
   const formInView = useInView(formRef, { once: true, amount: 0.1 });
+
+  // Update available cities when state changes
+  useEffect(() => {
+    if (formData.state && formData.state !== "other" && statesAndCities[formData.state]) {
+      setAvailableCities(statesAndCities[formData.state]);
+      setShowCustomCity(false);
+      setFormData(prev => ({ ...prev, city: "" }));
+    } else if (formData.state === "other") {
+      setAvailableCities([]);
+      setShowCustomCity(true);
+    } else {
+      setAvailableCities([]);
+    }
+  }, [formData.state]);
+
+  const handleStateChange = (value: string) => {
+    if (value === "other") {
+      setShowCustomState(true);
+      setFormData({ ...formData, state: "other", city: "" });
+    } else {
+      setShowCustomState(false);
+      setCustomState("");
+      setFormData({ ...formData, state: value, city: "" });
+    }
+  };
+
+  const handleCityChange = (value: string) => {
+    if (value === "other") {
+      setShowCustomCity(true);
+      setFormData({ ...formData, city: "other" });
+    } else {
+      setShowCustomCity(false);
+      setCustomCity("");
+      setFormData({ ...formData, city: value });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -176,15 +262,21 @@ export default function ContactPage() {
       return;
     }
 
+    // Prepare final form data with custom values if needed
+    const finalFormData = {
+      ...formData,
+      state: showCustomState ? customState : formData.state,
+      city: showCustomCity ? customCity : formData.city,
+    };
+
     setLoading(true);
     const loadingToast = toast.loading("Sending your message...");
 
     try {
-      // call our server-side API route
       const response = await fetch("/api/send-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(finalFormData),
       });
 
       const data = await response.json();
@@ -202,6 +294,10 @@ export default function ContactPage() {
         });
 
         setFormData(initialFormState);
+        setShowCustomState(false);
+        setShowCustomCity(false);
+        setCustomState("");
+        setCustomCity("");
       } else {
         toast.error(
           data._server_messages || data.error || "Failed to create lead."
@@ -387,7 +483,7 @@ export default function ContactPage() {
                           <Input
                             id="email"
                             type="email"
-                            placeholder="test@example.com"
+                            placeholder="contact@bizaihacks.com"
                             value={formData.email}
                             onChange={(e) =>
                               setFormData({
@@ -404,7 +500,7 @@ export default function ContactPage() {
                           <Input
                             id="website"
                             type="url"
-                            placeholder="https://example.com"
+                            placeholder="https://bizaihacks.com/"
                             value={formData.website}
                             onChange={(e) =>
                               setFormData({
@@ -417,7 +513,7 @@ export default function ContactPage() {
                         </div>
                       </div>
 
-                      {/* Phone & Extension */}
+                      {/* Phone */}
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="space-y-2 sm:col-span-2">
                           <Label htmlFor="phone">Phone</Label>
@@ -438,6 +534,89 @@ export default function ContactPage() {
                       </div>
                     </div>
 
+                    {/* Location Information Section */}
+                    <div className="space-y-4">
+                      <h3
+                        className="text-lg font-semibold"
+                        style={{ color: "hsl(var(--primary))" }}
+                      >
+                        Location Information
+                      </h3>
+
+                      {/* State & City */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* State Dropdown */}
+                        <div className="space-y-2">
+                          <Label htmlFor="state">State</Label>
+                          <select
+                            id="state"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            value={showCustomState ? "other" : formData.state}
+                            onChange={(e) => handleStateChange(e.target.value)}
+                            disabled={loading}
+                          >
+                            <option value="">Select State</option>
+                            {statesList.map((state) => (
+                              <option key={state} value={state}>
+                                {state}
+                              </option>
+                            ))}
+                            <option value="other">➕ Other (Add Custom)</option>
+                          </select>
+                          
+                          {/* Custom State Input */}
+                          {showCustomState && (
+                            <Input
+                              placeholder="Enter your state"
+                              value={customState}
+                              onChange={(e) => setCustomState(e.target.value)}
+                              disabled={loading}
+                              className="mt-2"
+                            />
+                          )}
+                        </div>
+
+                        {/* City Dropdown */}
+                        <div className="space-y-2">
+                          <Label htmlFor="city">City</Label>
+                          <select
+                            id="city"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            value={showCustomCity && !showCustomState ? "other" : formData.city}
+                            onChange={(e) => handleCityChange(e.target.value)}
+                            disabled={loading || (!formData.state && !showCustomState)}
+                          >
+                            <option value="">
+                              {!formData.state && !showCustomState 
+                                ? "Select State First" 
+                                : showCustomState 
+                                  ? "Enter City Below" 
+                                  : "Select City"}
+                            </option>
+                            {!showCustomState && availableCities.map((city) => (
+                              <option key={city} value={city}>
+                                {city}
+                              </option>
+                            ))}
+                            {!showCustomState && formData.state && (
+                              <option value="other">➕ Other (Add Custom)</option>
+                            )}
+                          </select>
+                          
+                          {/* Custom City Input */}
+                          {(showCustomCity || showCustomState) && (
+                            <Input
+                              placeholder="Enter your city"
+                              value={customCity}
+                              onChange={(e) => setCustomCity(e.target.value)}
+                              disabled={loading}
+                              className="mt-2"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Organization Information Section */}
                     <div className="space-y-4">
                       <h3
@@ -452,7 +631,7 @@ export default function ContactPage() {
                         <Label htmlFor="company">Organization Name</Label>
                         <Input
                           id="company"
-                          placeholder="Demo Corp"
+                          placeholder="Bizaihacks"
                           value={formData.company}
                           onChange={(e) =>
                             setFormData({
@@ -464,7 +643,7 @@ export default function ContactPage() {
                         />
                       </div>
 
-                      {/* No of Employees & Annual Revenue */}
+                      {/* No of Employees */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="noOfEmployees">No of Employees</Label>
@@ -490,7 +669,7 @@ export default function ContactPage() {
                         </div>
                       </div>
 
-                      {/* Industry & Market Segment */}
+                      {/* Industry */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label htmlFor="industry">Industry</Label>
@@ -519,66 +698,6 @@ export default function ContactPage() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Inquiry Details Section */}
-                    {/* <div className="space-y-4">
-                      <h3
-                        className="text-lg font-semibold"
-                        style={{ color: "hsl(var(--primary))" }}
-                      >
-                        Inquiry Details
-                      </h3>
-
-                    
-                      <div className="space-y-2">
-                        <Label>How can we help you? *</Label>
-                        <RadioGroup
-                          value={formData.reason}
-                          onValueChange={(value: any) =>
-                            setFormData({ ...formData, reason: value })
-                          }
-                          disabled={loading}
-                        >
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {contactReasons.map((reason) => (
-                              <div
-                                key={reason.value}
-                                className="flex items-center space-x-2"
-                              >
-                                <RadioGroupItem
-                                  value={reason.value}
-                                  id={reason.value}
-                                />
-                                <Label
-                                  htmlFor={reason.value}
-                                  className="font-normal cursor-pointer"
-                                >
-                                  {reason.label}
-                                </Label>
-                              </div>
-                            ))}
-                          </div>
-                        </RadioGroup>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="message">Your Message *</Label>
-                        <Textarea
-                          id="message"
-                          placeholder="Tell us about your project or questions..."
-                          className="min-h-[120px]"
-                          value={formData.message}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              message: e.target.value,
-                            })
-                          }
-                          required
-                          disabled={loading}
-                        />
-                      </div>
-                    </div> */}
 
                     <div>
                       <Button
@@ -658,22 +777,6 @@ export default function ContactPage() {
                         title: "Data Security Review",
                         desc: "We evaluate your current security posture and compliance readiness.",
                       },
-                      // {
-                      //   title: "AI Workflow Optimization",
-                      //   desc: "Identify areas where automation can reduce manual workload.",
-                      // },
-                      // {
-                      //   title: "Scalability Consultation",
-                      //   desc: "Plan how to expand AI usage across departments efficiently.",
-                      // },
-                      // {
-                      //   title: "Post-Implementation Monitoring",
-                      //   desc: "Track performance metrics and ensure consistent AI accuracy.",
-                      // },
-                      // {
-                      //   title: "Dedicated Account Manager",
-                      //   desc: "Get a single point of contact for all your AI project needs.",
-                      // },
                     ].map((item, index) => (
                       <motion.div
                         key={item.title}
@@ -730,7 +833,7 @@ export default function ContactPage() {
         </div>
       </div>
       {/* CTA Section */}
-      <RequestQuote />
+      {/* <RequestQuote /> */}
     </div>
   );
 }
