@@ -271,7 +271,7 @@ export default function ConsultationPage() {
       </section>
 
       {/* CTA Section */}
-      <RequestQuote />
+      <RequestQuote pageContext="Service: AI Consultation" />
     </div>
   );
 }

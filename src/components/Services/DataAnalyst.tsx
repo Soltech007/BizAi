@@ -331,7 +331,7 @@ export default function DataAnalyticsPage() {
       </section>
 
       {/* CTA Section */}
-      <RequestQuote />
+     <RequestQuote pageContext="Service: Data Analytics" />
     </div>
   );
 }

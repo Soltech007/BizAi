@@ -153,7 +153,7 @@ export default function Footer() {
                   className="hover:text-primary transition-colors"
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
-                  +91 90235 06084
+                  +91 97237 23322
                 </a>
               </div>
 

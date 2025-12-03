@@ -275,7 +275,7 @@ export default function TrainingPage() {
       </section>
 
       {/* CTA Section */}
-      <RequestQuote />
+     <RequestQuote pageContext="Service: AI Training" />
     </div>
   );
 }

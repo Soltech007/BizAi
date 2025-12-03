@@ -500,7 +500,7 @@ export default function ChannelPartnerPremiumPage() {
                       Contact Number *
                     </label>
                     <Input
-                      placeholder="+91 90235 06084"
+                      placeholder="+91 97237 23322"
                       value={formData.contactNo}
                       onChange={(e) => handleChange("contactNo", e.target.value)}
                       className={inputClassName}

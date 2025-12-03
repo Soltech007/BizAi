@@ -166,14 +166,14 @@ const quickContacts = [
   },
   {
     title: "Call Us",
-    value: "+91 90235 06084",
+    value: "+91 97237 23322",
     action: "tel:+919876543210",
     icon: <Phone className="w-6 h-6" />,
     description: "Available Mon-Fri, 9am-6pm IST.",
   },
   {
     title: "WhatsApp",
-    value: "+91 90235 06084",
+    value: "+91 97237 23322",
     action: "https://wa.me/919876543210",
     icon: <MessageSquare className="w-6 h-6" />,
     description: "Chat with us instantly on WhatsApp.",
@@ -520,7 +520,7 @@ export default function ContactPage() {
                           <Input
                             id="phone"
                             type="tel"
-                            placeholder="+91 90235 06084"
+                            placeholder="+91 97237 23322"
                             value={formData.phone}
                             onChange={(e) =>
                               setFormData({

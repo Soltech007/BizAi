@@ -389,7 +389,7 @@ export default function AIForHRPage() {
       </section>
 
       {/* CTA Section */}
-      <RequestQuote />
+     <RequestQuote pageContext="Product: AI For Human Resources" />
     </div>
   );
 }

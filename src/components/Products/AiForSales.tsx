@@ -389,7 +389,7 @@ export default function AIForSalesPage() {
       </section>
 
       {/* CTA Section */}
-      <RequestQuote />
+     <RequestQuote pageContext="Product: AI For Sales" />
     </div>
   );
 }
