@@ -47,7 +47,6 @@ async function ensureLeadSourceExists(sourceName: string) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log("📥 Received Lead:", body);
 
     if (!body.firstName || !body.email) {
       return NextResponse.json({ error: "Name/Email required" }, { status: 400 });
@@ -60,38 +59,31 @@ export async function POST(req: NextRequest) {
     await ensureLeadSourceExists(pageSource);
 
     // 2. Prepare Payload
-    const payload = {
-      first_name: body.firstName,
-      last_name: body.lastName || "",
-      lead_name: `${body.firstName} ${body.lastName || ""}`.trim(),
-      email_id: body.email,
-      company_name: body.company || "",
-      
-      // ✅ CORRECTED: Page Name in Source field
-      source: 'Website',
-      
-      // ✅ FIX: Tere ERP me field ID 'custom_verticals' hai
-      custom_lead_interest: "AIBIZHACKS",
-      
-      // ✅ Industry from Form
-      industry: body.industry,
-      
-      // ✅ Redirect Form Field (Tere dump me 'custom_redirect_form' dikh raha tha, usme bhi page daal dete hain safety ke liye)
-      custom_redirect_form: pageSource,
+const payload = {
+  first_name: body.firstName,
+  last_name: body.lastName || "",
+  lead_name: `${body.firstName} ${body.lastName || ""}`.trim(),
+  email_id: body.email,
+  company_name: body.company || "",
+  source: "Website",
+  custom_lead_interest: "AIBIZHACKS",
+  industry: body.industry,
+  custom_redirect_form: pageSource,
+  lead_source_details: `
+    Message: ${body.message || 'N/A'}
+    Employees: ${body.noOfEmployees || 'N/A'}
+    Website: ${body.website || 'N/A'}
+    Location: ${body.city || ''}, ${body.state || ''}
+  `.trim(),
 
-      // Extra details
-      lead_source_details: `
-        Message: ${body.message || 'N/A'}
-        Employees: ${body.noOfEmployees || 'N/A'}
-        Website: ${body.website || 'N/A'}
-        Location: ${body.city || ''}, ${body.state || ''}
-      `.trim(),
-      
-      status: "Lead",
-      mobile_no: body.phone, // Use mobile_no (standard)
-      city: body.city,
-      state: body.state
-    };
+  status: "Lead",
+  mobile_no: body.phone,
+  city: body.city,
+  state: body.state,
+
+  // ✅ Add this line
+  lead_owner: "lead@Bizaihacks.com",
+};
 
     console.log("📤 Sending to ERP:", JSON.stringify(payload, null, 2));
 
