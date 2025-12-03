@@ -381,7 +381,7 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
                     </div>
 
                     {/* --- Message --- */}
-                    <div className="space-y-2">
+                    {/* <div className="space-y-2">
                         <Label htmlFor="message">Requirements / Message</Label>
                         <textarea 
                             id="message"
@@ -390,7 +390,7 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
                             value={formData.message}
                             onChange={(e) => setFormData(prev => ({...prev, message: e.target.value}))}
                         />
-                    </div>
+                    </div> */}
 
                     <Button disabled={loading} type="submit" className="w-full btn-primary-custom h-12 text-base mt-4">
                       {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : 'Submit Request'}
