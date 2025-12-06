@@ -40,7 +40,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
                 className="flex items-center gap-1.5 text-gray-600 hover:text-red-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-white"
             >
                 <Share2 className="w-4 h-4" />
-                <span className="hidden sm:inline">Share</span>
+                <span className="hidden sm:inline">Share </span>
             </button>
 
             {/* Share Modal */}
