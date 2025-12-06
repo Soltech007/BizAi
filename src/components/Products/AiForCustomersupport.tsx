@@ -432,7 +432,7 @@ export default function AIForCustomerSupportPage() {
                         <CardTitle className="text-lg group-hover:text-primary transition-colors">
                           {useCase.title}
                         </CardTitle>
-                        <p className="text-sm mt-2 leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                        <p className="text-sm mt-2  leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
                           {useCase.description}
                         </p>
                       </div>
