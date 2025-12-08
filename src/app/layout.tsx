@@ -1,7 +1,9 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import SkipLink from "@/components/SkipLink"; // ✅ Add this import
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bizaihacks.com"),
@@ -73,6 +75,31 @@ export default function RootLayout({
           }}
         />
 
+        {/* ✅ Structured Data - ADD THIS */}
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "BizAI Hacks",
+              "url": "https://bizaihacks.com",
+              "logo": "https://bizaihacks.com/logo.jpg",
+              "description": "AI-driven business automation and enterprise solutions.",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-97237-23322",
+                "contactType": "customer service",
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/bizaihacks/",
+                "https://www.facebook.com/bizaihacks/"
+              ],
+            }),
+          }}
+        />
+
         {/* ✅ LLM & AI Crawlers Metadata */}
         <meta
           name="robots"
@@ -91,16 +118,21 @@ export default function RootLayout({
         {/* ✅ Google Tag Manager (noscript fallback) */}
         <noscript>
           <iframe
-            title="bizaihacks"
+            title="Google Tag Manager"
             src="https://www.googletagmanager.com/ns.html?id=GTM-P7HL92HS"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
-          ></iframe>
+          />
         </noscript>
 
-        {/* Page Content */}
-        {children}
+        {/* ✅ ADD SKIP LINK */}
+        <SkipLink />
+
+        {/* ✅ ADD main landmark with id */}
+        <main id="main-content" tabIndex={-1}>
+          {children}
+        </main>
 
         {/* ✅ Toast Notifications */}
         <Toaster position="top-center" reverseOrder={false} />

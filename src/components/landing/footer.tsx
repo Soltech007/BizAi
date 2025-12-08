@@ -19,14 +19,12 @@ const footerLinks = {
     { name: "Training", href: "/services/training" },
     { name: "Data-Analyst", href: "/services/dataanalytics" },
     { name: "Implementation", href: "/services/implementation" },
-    
   ],
   Company: [
     { name: "About Us", href: "/about" },
     { name: "Careers", href: "#" },
     { name: "Contact Us", href: "/contact" },
-    { name: "Became a channel partner", href: "/partner" },
-    // { name: "Partnerships", href: "/partnerships" },
+    { name: "Become a channel partner", href: "/partner" },
   ],
   Resources: [
     { name: "Blog", href: "#" },
@@ -36,24 +34,18 @@ const footerLinks = {
   ],
 };
 
+// ✅ FIX: Add aria-labels to social links
 const socialLinks = [
-  { name: "Twitter", href: "#", Icon: Twitter },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/company/bizaihacks/",
-    Icon: Linkedin,
-  },
-  { name: "Instagram", href: "#", Icon: FaInstagram },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/bizaihacks/",
-    Icon: FaFacebook,
-  },
+  { name: "Twitter", href: "#", Icon: Twitter, ariaLabel: "Follow BizAI Hacks on Twitter" },
+  { name: "LinkedIn", href: "https://www.linkedin.com/company/bizaihacks/", Icon: Linkedin, ariaLabel: "Follow BizAI Hacks on LinkedIn" },
+  { name: "Instagram", href: "#", Icon: FaInstagram, ariaLabel: "Follow BizAI Hacks on Instagram" },
+  { name: "Facebook", href: "https://www.facebook.com/bizaihacks/", Icon: FaFacebook, ariaLabel: "Follow BizAI Hacks on Facebook" },
 ];
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,16 +56,6 @@ export default function Footer() {
     }
 
     setLoading(true);
-    const loadingToast = toast.success(" Subscribing..", {
-      position: "top-center",
-      icon: "✅",
-      style: {
-          background: `btn-primary-custom`,
-        marginTop: "50px",
-        color: `hsl(var(--foreground))`,
-        borderRadius: "8px",
-      },
-    });
 
     try {
       const response = await fetch("/api/newsletter", {
@@ -85,26 +67,25 @@ export default function Footer() {
       const data = await response.json();
 
       if (response.ok) {
+        setSubscribeStatus('success');
         toast.success("Subscribed successfully 🎉", {
           position: "top-center",
           icon: "✅",
-          style: {
-            background: `btn-primary-custom`,
-            color: `hsl(var(--foreground))`,
-            marginTop: "50px",
-            borderRadius: "8px",
-          },
         });
         setEmail("");
+        setTimeout(() => setSubscribeStatus('idle'), 5000);
       } else {
+        setSubscribeStatus('error');
         toast.error(data.error || "Failed to subscribe");
+        setTimeout(() => setSubscribeStatus('idle'), 5000);
       }
     } catch (err) {
       console.error(err);
+      setSubscribeStatus('error');
       toast.error("Something went wrong");
+      setTimeout(() => setSubscribeStatus('idle'), 5000);
     } finally {
       setLoading(false);
-      toast.dismiss(loadingToast);
     }
   };
 
@@ -115,12 +96,18 @@ export default function Footer() {
         backgroundColor: "hsl(var(--background))",
         borderColor: "hsl(var(--border))",
       }}
+      role="contentinfo"
     >
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
           {/* Left: Logo + Info */}
           <div className="md:col-span-4 space-y-4">
-            <Link href="/" className="flex items-center gap-2 group">
+            {/* ✅ FIX: Add aria-label to logo link */}
+            <Link 
+              href="/" 
+              className="flex items-center gap-2 group"
+              aria-label="BizAI Hacks - Go to homepage"
+            >
               <div className="w-[150px] h-10">
                 <Image
                   src="/logo.webp"
@@ -142,14 +129,15 @@ export default function Footer() {
             </p>
 
             {/* Contact Info */}
-            <div className="space-y-2 pt-2">
+            <address className="space-y-2 pt-2 not-italic">
               <div className="flex items-center gap-2 text-sm">
                 <Phone
-                  className="h-4 w-4"
+                  className="h-4 w-4 flex-shrink-0"
                   style={{ color: "hsl(var(--primary))" }}
+                  aria-hidden="true"
                 />
                 <a
-                  href="tel:+919023506084"
+                  href="tel:+919723723322"
                   className="hover:text-primary transition-colors"
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
@@ -159,8 +147,9 @@ export default function Footer() {
 
               <div className="flex items-center gap-2 text-sm">
                 <Mail
-                  className="h-4 w-4"
+                  className="h-4 w-4 flex-shrink-0"
                   style={{ color: "hsl(var(--primary))" }}
+                  aria-hidden="true"
                 />
                 <a
                   href="mailto:contact@bizaihacks.com"
@@ -173,8 +162,9 @@ export default function Footer() {
 
               <div className="flex items-start gap-2 text-sm">
                 <MapPin
-                  className="h-4 w-4 mt-0.5"
+                  className="h-4 w-4 mt-0.5 flex-shrink-0"
                   style={{ color: "hsl(var(--primary))" }}
+                  aria-hidden="true"
                 />
                 <span style={{ color: "hsl(var(--muted-foreground))" }}>
                   Vibrant Park, Survey No. 182 <br /> Near NH 8 GIDC Phase 1,{" "}
@@ -182,23 +172,24 @@ export default function Footer() {
                   Vapi, Gujarat - 396195, India
                 </span>
               </div>
-            </div>
+            </address>
 
-            {/* Social Links */}
+            {/* ✅ FIX: Social Links with proper aria-labels and touch targets */}
             <div className="flex gap-3 pt-2">
-              {socialLinks.map(({ name, href, Icon }) => (
+              {socialLinks.map(({ name, href, Icon, ariaLabel }) => (
                 <a
                   key={name}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 group"
+                  aria-label={ariaLabel}
+                  className="w-10 h-10 min-h-[44px] min-w-[44px] rounded-lg flex items-center justify-center transition-all duration-200 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-primary"
                   style={{
                     backgroundColor: "hsl(var(--accent) / 0.5)",
                     color: "hsl(var(--muted-foreground))",
                   }}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-5 h-5" aria-hidden="true" />
                 </a>
               ))}
             </div>
@@ -219,7 +210,7 @@ export default function Footer() {
                     <li key={link.name}>
                       <Link
                         href={link.href}
-                        className="text-xs md:text-sm hover:text-primary transition-colors inline-flex items-center group"
+                        className="text-xs md:text-sm hover:text-primary transition-colors inline-flex items-center group py-1"
                         style={{ color: "hsl(var(--muted-foreground))" }}
                       >
                         {link.name}
@@ -231,9 +222,10 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Newsletter */}
+          {/* ✅ FIX: Newsletter with proper label */}
           <div className="md:col-span-2">
             <h3
+              id="newsletter-heading"
               className="font-semibold text-sm uppercase tracking-wider mb-4"
               style={{ color: "hsl(var(--foreground))" }}
             >
@@ -246,23 +238,67 @@ export default function Footer() {
               Get weekly insights on enterprise AI and automation.
             </p>
 
-            <form onSubmit={handleSubscribe} className="space-y-4">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-accent/50 border-border focus:border-primary focus:ring-primary"
-                id="new"
-              />
+            <form 
+              onSubmit={handleSubscribe} 
+              className="space-y-4"
+              aria-labelledby="newsletter-heading"
+            >
+              {/* ✅ FIX: Add proper label for input */}
+              <div>
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Email address for newsletter subscription
+                </label>
+                <Input
+                  type="email"
+                  id="newsletter-email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-accent/50 border-border focus:border-primary focus:ring-primary min-h-[44px]"
+                  required
+                  aria-required="true"
+                  aria-invalid={subscribeStatus === 'error'}
+                  aria-describedby={
+                    subscribeStatus === 'success' ? 'newsletter-success' : 
+                    subscribeStatus === 'error' ? 'newsletter-error' : 
+                    undefined
+                  }
+                  disabled={loading}
+                />
+              </div>
+              
               <Button
                 type="submit"
-                className="w-full btn-primary-custom hover:bg-primary/90 mt-3"
+                className="w-full btn-primary-custom hover:bg-primary/90 min-h-[44px]"
                 disabled={loading}
-                id="news"
+                aria-busy={loading}
               >
                 {loading ? "Subscribing..." : "Subscribe"}
               </Button>
+              
+              {/* ✅ Status messages with ARIA */}
+              {subscribeStatus === 'success' && (
+                <p 
+                  id="newsletter-success" 
+                  role="status" 
+                  aria-live="polite"
+                  className="text-xs text-green-600"
+                >
+                  ✅ Successfully subscribed!
+                </p>
+              )}
+              
+              {subscribeStatus === 'error' && (
+                <p 
+                  id="newsletter-error" 
+                  role="alert" 
+                  aria-live="assertive"
+                  className="text-xs text-red-600"
+                >
+                  ❌ Subscription failed. Please try again.
+                </p>
+              )}
             </form>
 
             <p
@@ -277,6 +313,7 @@ export default function Footer() {
         <div
           className="my-8 md:my-12 border-t"
           style={{ borderColor: "hsl(var(--border))" }}
+          aria-hidden="true"
         />
 
         {/* Bottom Bar */}
@@ -286,37 +323,41 @@ export default function Footer() {
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
             &copy; {new Date().getFullYear()} BizAI Hacks. A division of{" "}
-            <Link href="https://soltechtechservices.com">
-              <strong>SOLTECH TechServices Pvt Ltd</strong>.
+            <Link 
+              href="https://soltechtechservices.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <strong>SOLTECH TechServices Pvt Ltd</strong>
             </Link>
           </p>
 
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <nav aria-label="Legal links" className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link
               href="/privacypolicy"
-              className="hover:text-primary transition-colors"
+              className="hover:text-primary transition-colors py-1"
             >
               Privacy Policy
             </Link>
             <Link
               href="/termsandconditions"
-              className="hover:text-primary transition-colors"
+              className="hover:text-primary transition-colors py-1"
             >
               Terms of Service
             </Link>
             <Link
               href="/disclaimer"
-              className="hover:text-primary transition-colors"
+              className="hover:text-primary transition-colors py-1"
             >
               Disclaimer
             </Link>
             <Link
               href="/cookiepolicy"
-              className="hover:text-primary transition-colors"
+              className="hover:text-primary transition-colors py-1"
             >
               Cookies Policy
             </Link>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>
