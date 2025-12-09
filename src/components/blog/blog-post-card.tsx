@@ -2,10 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
+<<<<<<< HEAD
 import { type Blog } from "@/types/blog";
 
 type BlogPostCardProps = {
   post: Blog;
+=======
+import { type BlogListItem } from "@/lib/api/blogs";
+
+type BlogPostCardProps = {
+  post: BlogListItem;
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 };
 
 export default function BlogPostCard({ post }: BlogPostCardProps) {
@@ -50,6 +57,15 @@ export default function BlogPostCard({ post }: BlogPostCardProps) {
               <Calendar className="w-3 h-3" />
               {formattedDate}
             </span>
+<<<<<<< HEAD
+=======
+            {post.reading_time && (
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {post.reading_time} min
+              </span>
+            )}
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
           </div>
 
           <Link

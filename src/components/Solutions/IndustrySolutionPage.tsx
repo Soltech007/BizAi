@@ -14,6 +14,14 @@ import RequestQuote from "@/app/(frontend)/common/requestquote";
 import { IndustrySolution } from "@/data/industry-solutions-detailed";
 import { useState } from "react";
 
+<<<<<<< HEAD
+=======
+
+interface IndustrySolutionPageProps {
+  data: IndustrySolution;
+}
+
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 // Icon mapping
 const iconMap: Record<string, LucideIcon> = {
   Building2, CarFront, Leaf, FlaskConical, Heart, Truck, Landmark, GraduationCap, ShoppingCart,
@@ -658,7 +666,11 @@ export default function IndustrySolutionPage({ data }: IndustrySolutionPageProps
       </section>
 
       {/* Final CTA */}
+<<<<<<< HEAD
       <RequestQuote />
+=======
+      <RequestQuote pageContext={`Solution: ${data.industry}`} />
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     </div>
   );
 }

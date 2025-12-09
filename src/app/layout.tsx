@@ -1,7 +1,15 @@
+<<<<<<< HEAD
+=======
+// app/layout.tsx
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+<<<<<<< HEAD
+=======
+import SkipLink from "@/components/SkipLink"; // ✅ Add this import
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bizaihacks.com"),
@@ -73,6 +81,34 @@ export default function RootLayout({
           }}
         />
 
+<<<<<<< HEAD
+=======
+        {/* ✅ Structured Data - ADD THIS */}
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "BizAI Hacks",
+              "url": "https://bizaihacks.com",
+              "logo": "https://bizaihacks.com/logo.jpg",
+              "description": "AI-driven business automation and enterprise solutions.",
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-97237-23322",
+                "contactType": "customer service",
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/bizaihacks/",
+                "https://www.facebook.com/bizaihacks/"
+              ],
+            }),
+          }}
+        />
+
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
         {/* ✅ LLM & AI Crawlers Metadata */}
         <meta
           name="robots"
@@ -91,20 +127,41 @@ export default function RootLayout({
         {/* ✅ Google Tag Manager (noscript fallback) */}
         <noscript>
           <iframe
+<<<<<<< HEAD
             title="bizaihacks"
+=======
+            title="Google Tag Manager"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
             src="https://www.googletagmanager.com/ns.html?id=GTM-P7HL92HS"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
+<<<<<<< HEAD
           ></iframe>
         </noscript>
 
         {/* Page Content */}
         {children}
+=======
+          />
+        </noscript>
+
+        {/* ✅ ADD SKIP LINK */}
+        <SkipLink />
+
+        {/* ✅ ADD main landmark with id */}
+        <main id="main-content" tabIndex={-1}>
+          {children}
+        </main>
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 
         {/* ✅ Toast Notifications */}
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14

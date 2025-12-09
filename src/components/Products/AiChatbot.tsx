@@ -406,6 +406,7 @@ export default function AIAutomationChatbotPage() {
         </div>
       </section>
 
+<<<<<<< HEAD
       {/* Benefits */}
       {/* <section className="py-10 md:py-10 border-t" >
         <div className="container max-w-7xl px-4 md:px-8">
@@ -584,6 +585,12 @@ export default function AIAutomationChatbotPage() {
 
       {/* CTA Section */}
       <RequestQuote/>
+=======
+      
+
+      {/* CTA Section */}
+<RequestQuote pageContext="Product: AI Automation Chatbot" />
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     </div>
   );
 }

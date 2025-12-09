@@ -432,7 +432,11 @@ export default function AIForCustomerSupportPage() {
                         <CardTitle className="text-lg group-hover:text-primary transition-colors">
                           {useCase.title}
                         </CardTitle>
+<<<<<<< HEAD
                         <p className="text-sm mt-2 leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
+=======
+                        <p className="text-sm mt-2  leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                           {useCase.description}
                         </p>
                       </div>
@@ -446,7 +450,11 @@ export default function AIForCustomerSupportPage() {
       </section>
 
       {/* CTA Section */}
+<<<<<<< HEAD
       <RequestQuote />
+=======
+      <RequestQuote pageContext="Product: AI Customer Support" />
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     </div>
   );
 }

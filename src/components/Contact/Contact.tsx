@@ -166,14 +166,22 @@ const quickContacts = [
   },
   {
     title: "Call Us",
+<<<<<<< HEAD
     value: "+91 90235 06084",
+=======
+    value: "+91 97237 23322",
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     action: "tel:+919876543210",
     icon: <Phone className="w-6 h-6" />,
     description: "Available Mon-Fri, 9am-6pm IST.",
   },
   {
     title: "WhatsApp",
+<<<<<<< HEAD
     value: "+91 90235 06084",
+=======
+    value: "+91 97237 23322",
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     action: "https://wa.me/919876543210",
     icon: <MessageSquare className="w-6 h-6" />,
     description: "Chat with us instantly on WhatsApp.",
@@ -520,7 +528,11 @@ export default function ContactPage() {
                           <Input
                             id="phone"
                             type="tel"
+<<<<<<< HEAD
                             placeholder="+91 90235 06084"
+=======
+                            placeholder="+91 97237 23322"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                             value={formData.phone}
                             onChange={(e) =>
                               setFormData({
@@ -550,6 +562,10 @@ export default function ContactPage() {
                           <Label htmlFor="state">State</Label>
                           <select
                             id="state"
+<<<<<<< HEAD
+=======
+                            aria-label="Select State"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             value={showCustomState ? "other" : formData.state}
                             onChange={(e) => handleStateChange(e.target.value)}
@@ -581,6 +597,10 @@ export default function ContactPage() {
                           <Label htmlFor="city">City</Label>
                           <select
                             id="city"
+<<<<<<< HEAD
+=======
+                            aria-label="Select City"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             value={showCustomCity && !showCustomState ? "other" : formData.city}
                             onChange={(e) => handleCityChange(e.target.value)}
@@ -607,6 +627,10 @@ export default function ContactPage() {
                           {(showCustomCity || showCustomState) && (
                             <Input
                               placeholder="Enter your city"
+<<<<<<< HEAD
+=======
+                              aria-label="Enter your city"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                               value={customCity}
                               onChange={(e) => setCustomCity(e.target.value)}
                               disabled={loading}
@@ -631,6 +655,10 @@ export default function ContactPage() {
                         <Label htmlFor="company">Organization Name</Label>
                         <Input
                           id="company"
+<<<<<<< HEAD
+=======
+                          aria-label="Company Name"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                           placeholder="Bizaihacks"
                           value={formData.company}
                           onChange={(e) =>
@@ -649,6 +677,10 @@ export default function ContactPage() {
                           <Label htmlFor="noOfEmployees">No of Employees</Label>
                           <select
                             id="noOfEmployees"
+<<<<<<< HEAD
+=======
+                              aria-label="Number of Employees"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             value={formData.noOfEmployees}
                             onChange={(e) =>
@@ -675,6 +707,10 @@ export default function ContactPage() {
                           <Label htmlFor="industry">Industry</Label>
                           <select
                             id="industry"
+<<<<<<< HEAD
+=======
+                            aria-label="Select Industry"
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             value={formData.industry}
                             onChange={(e) =>

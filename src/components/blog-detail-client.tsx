@@ -22,13 +22,21 @@ import {
     Heart,
     Bookmark
 } from 'lucide-react';
+<<<<<<< HEAD
 import { type Blog } from '@/types/blog';
+=======
+import { type Blog, type BlogListItem } from '@/lib/api/blogs';
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 import BlogPostCard from '@/components/blog/blog-post-card';
 import toast from 'react-hot-toast';
 
 interface BlogDetailClientProps {
     blog: Blog;
+<<<<<<< HEAD
     relatedBlogs: Blog[];
+=======
+    relatedBlogs: BlogListItem[];
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 }
 
 export default function BlogDetailClient({ blog, relatedBlogs }: BlogDetailClientProps) {
@@ -97,7 +105,16 @@ export default function BlogDetailClient({ blog, relatedBlogs }: BlogDetailClien
                             <Calendar className="w-4 h-4" />
                             {formattedDate}
                         </span>
+<<<<<<< HEAD
 
+=======
+                        {blog.reading_time && (
+                            <span className="flex items-center gap-2">
+                                <Clock className="w-4 h-4" />
+                                {blog.reading_time} min read
+                            </span>
+                        )}
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                     </div>
 
                     {/* Action Buttons */}
@@ -176,6 +193,7 @@ export default function BlogDetailClient({ blog, relatedBlogs }: BlogDetailClien
                         />
 
                         {/* Tags */}
+<<<<<<< HEAD
                         {blog.tags && (
                             <div className="mt-12 pt-8 border-t border-gray-200">
                                 <h3 className="text-lg font-semibold mb-4">Tags</h3>
@@ -184,6 +202,17 @@ export default function BlogDetailClient({ blog, relatedBlogs }: BlogDetailClien
                                         <span
                                             key={index}
                                             className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors cursor-pointer">
+=======
+                        {blog.meta_keywords && (
+                            <div className="mt-12 pt-8 border-t border-gray-200">
+                                <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {blog.meta_keywords.split(',').map((tag, index) => (
+                                        <span
+                                            key={index}
+                                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-[#FF6B35] hover:text-white transition-colors cursor-pointer"
+                                        >
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
                                             {tag.trim()}
                                         </span>
                                     ))}

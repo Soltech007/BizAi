@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2017",
+<<<<<<< HEAD
     "lib": ["dom", "dom.iterable", "esnext"],
+=======
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +19,11 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+<<<<<<< HEAD
     "jsx": "preserve",
+=======
+    "jsx": "react-jsx",
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
     "incremental": true,
     "plugins": [
       {
@@ -19,9 +31,28 @@
       }
     ],
     "paths": {
+<<<<<<< HEAD
       "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Services/Consultation"],
   "exclude": ["node_modules"]
+=======
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/components/Services/Consultation",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 }

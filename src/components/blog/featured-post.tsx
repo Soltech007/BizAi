@@ -2,10 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
+<<<<<<< HEAD
 import { type Blog } from "@/types/blog";
 
 type FeaturedPostProps = {
   post: Blog;
+=======
+import { type BlogListItem } from "@/lib/api/blogs";
+
+type FeaturedPostProps = {
+  post: BlogListItem;
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
 };
 
 export default function FeaturedPost({ post }: FeaturedPostProps) {
@@ -48,7 +55,16 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
             <Calendar className="w-4 h-4" />
             {formattedDate}
           </span>
+<<<<<<< HEAD
 
+=======
+          {post.reading_time && (
+            <span className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              {post.reading_time} min read
+            </span>
+          )}
+>>>>>>> 49348d4ed6f203e50201fa07449bba9a7f7d4c14
         </div>
         <Button asChild className="mt-6 bg-gradient-to-r from-[#FF6B35] to-[#FF8C42]" size="lg">
           <Link href={`/blog/${post.slug}`}>
