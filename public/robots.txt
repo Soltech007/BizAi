@@ -1,0 +1,15 @@
+# robots.txt for https://bizaihacks.com/
+
+User-agent: *
+Allow: /
+Sitemap: https://bizaihacks.com/sitemap.xml
+
+
+# Disallow admin or private pages (if any)
+Disallow: /api/
+Disallow: /private/
+Disallow: /temp/
+
+# Sitemap location
+Sitemap: https://bizaihacks.com/sitemap.xml
+

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+>
+  <url>
+    <loc>https://bizaihacks.com/</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/about</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/products</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/product/aicallingagent</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/product/aiautomationchatbot</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/services</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url><loc>https://bizaihacks.com/services/consultation</loc><lastmod>2025-11-11</lastmod></url>
+  <url><loc>https://bizaihacks.com/services/training</loc><lastmod>2025-11-11</lastmod></url>
+  <url><loc>https://bizaihacks.com/services/implementation</loc><lastmod>2025-11-11</lastmod></url>
+  <url><loc>https://bizaihacks.com/services/dataanalytics</loc><lastmod>2025-11-11</lastmod></url>
+
+  <url>
+    <loc>https://bizaihacks.com/solutions</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url><loc>https://bizaihacks.com/solutions/chemical</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/realestate</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/automobile</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/healthcare</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/agriculture</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/logistics</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/banking</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/education</loc></url>
+  <url><loc>https://bizaihacks.com/solutions/ecommerce</loc></url>
+
+  <url>
+    <loc>https://bizaihacks.com/partnerships</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/contact</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/privacypolicy</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/termsandconditions</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/disclaimer</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://bizaihacks.com/cookiespolicy</loc>
+    <lastmod>2025-11-11</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>
