@@ -255,7 +255,7 @@ export default function Footer() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-accent/50 border-border focus:border-primary focus:ring-primary min-h-[44px]"
+                  className="bg-accent/50 border-border focus:border-primary focus:ring-primary min-h-[44px] "
                   required
                   aria-required="true"
                   aria-invalid={subscribeStatus === 'error'}
