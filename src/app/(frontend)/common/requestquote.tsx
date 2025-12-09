@@ -164,7 +164,7 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 ">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
           
           {/* Backdrop */}
           <motion.div
