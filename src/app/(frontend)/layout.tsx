@@ -2,6 +2,7 @@
 import Header from "@/components/landing/header";
 import Footer from "@/components/landing/footer";
 import AIChatWidget from "@/components/Chat/AIChatWidget";
+import LayoutWrapper from "@/components/landing/LayoutWrapper";
 
 
 export const metadata = {
@@ -39,12 +40,15 @@ export default function SiteLayout({
 }) {
     return (
         <>
-            <Header />
+         
             <main className="bg-white min-h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))]">
+              <LayoutWrapper>
+      
                 {children}
+              </LayoutWrapper>
             </main>
             <AIChatWidget /> 
-            <Footer />
+      
         </>
     );
 }

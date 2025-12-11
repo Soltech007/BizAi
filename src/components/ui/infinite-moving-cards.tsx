@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/(frontend)/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Star, Quote } from "lucide-react";
 

@@ -1,44 +1,70 @@
-// src/middleware.ts (root mein banao)
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from "next/server";
+import { createServerClient } from "@supabase/ssr";
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+export async function middleware(request: NextRequest) {
+  // Debug Log: Agar ye print nahi hua terminal me, to file galat jagah hai
+  console.log("🔒 Middleware Check:", request.nextUrl.pathname);
 
-  const { data: { session } } = await supabase.auth.getSession()
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
 
-  // Admin routes that need protection
-  const protectedAdminRoutes = [
-    '/admin/dashboard',
-    '/admin/projects',
-    '/admin/categories',
-    '/admin/clients',
-    '/admin/contacts',
-    '/admin/blogs',
-    '/admin/settings'
-  ]
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value);
+          });
+          response = NextResponse.next({
+            request,
+          });
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
+        },
+      },
+    }
+  );
 
-  const pathname = req.nextUrl.pathname
+  // User check karo
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // Check if it's a protected admin route
-  const isProtectedAdminRoute = protectedAdminRoutes.some(route =>
-    pathname.startsWith(route)
-  )
+  console.log("👤 User Status:", user ? "Found" : "Not Found");
 
-  if (isProtectedAdminRoute && !session) {
-    // No session, redirect to login
-    return NextResponse.redirect(new URL('/admin/login', req.url))
+  const url = request.nextUrl.clone();
+
+  // 1. Protected Admin Routes
+  if (request.nextUrl.pathname.startsWith("/admin") && request.nextUrl.pathname !== "/admin/login") {
+    if (!user) {
+      console.log("⛔ Access Denied. Redirecting to Login.");
+      url.pathname = "/admin/login";
+      return NextResponse.redirect(url);
+    }
   }
 
-  // If user is logged in and trying to access login/signup, redirect to dashboard
-  if (session && (pathname === '/admin/login' || pathname === '/admin/signup')) {
-    return NextResponse.redirect(new URL('/admin/dashboard', req.url))
+  // 2. Redirect Logged-in user from Login to Dashboard
+  if (request.nextUrl.pathname === "/admin/login" && user) {
+    console.log("✅ Already Logged In. Redirecting to Dashboard.");
+    url.pathname = "/admin/dashboard";
+    return NextResponse.redirect(url);
   }
-  return res
+
+  return response;
 }
 
 export const config = {
-  matcher: ['/admin/:path*']
-}
+  // Matcher ko simple rakho test karne ke liye
+  matcher: [
+    "/admin/:path*",
+  ],
+};
