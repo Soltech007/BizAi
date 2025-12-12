@@ -19,8 +19,8 @@ const employeeRanges = [
 ];
 
 const industries = [
-  "Agriculture", "Automotive", "Banking", "Chemical", "Consulting", "Education", 
-  "Financial Services", "Health Care", "Manufacturing", "Real Estate", 
+  "Agriculture", "Automotive", "Banking", "Chemical", "Consulting", "Education",
+  "Financial Services", "Health Care", "Manufacturing", "Real Estate",
   "Retail & Wholesale", "Software", "Technology", "Logistics & Warehousing", "Other"
 ].map((ind) => ({ value: ind, label: ind }));
 
@@ -34,22 +34,21 @@ const statesAndCities: { [key: string]: string[] } = {
   "Telangana": ["Hyderabad", "Warangal"],
   "Uttar Pradesh": ["Lucknow", "Kanpur", "Noida", "Ghaziabad"],
   "West Bengal": ["Kolkata", "Howrah"],
-  // Add more as needed
 };
 const statesList = Object.keys(statesAndCities).sort();
-
 
 // --- POPUP MODAL ---
 const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClose: () => void; pageContext: string }) => {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  
-  // Initial State Object
+
+  // ✅ Initial State Object - WhatsApp field added
   const initialFormState = {
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
+    whatsappNo: '',  // 🆕 NEW FIELD
     company: '',
     website: '',
     industry: '',
@@ -58,9 +57,9 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
     city: '',
     message: ''
   }
-  
+
   const [formData, setFormData] = useState(initialFormState)
-  
+
   // Custom Location Logic
   const [showCustomState, setShowCustomState] = useState(false);
   const [showCustomCity, setShowCustomCity] = useState(false);
@@ -123,10 +122,10 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
 
     // Prepare Final Data Object
     const finalFormData = {
-        ...formData,
-        state: showCustomState ? customState : formData.state,
-        city: showCustomCity ? customCity : formData.city,
-        source: pageContext 
+      ...formData,
+      state: showCustomState ? customState : formData.state,
+      city: showCustomCity ? customCity : formData.city,
+      source: pageContext 
     };
 
     try {
@@ -142,13 +141,13 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
         setSuccess(true)
         toast.success("Inquiry Sent Successfully!")
         setTimeout(() => {
-            onClose()
-            setSuccess(false)
-            setFormData(initialFormState)
-            setShowCustomState(false)
-            setShowCustomCity(false)
-            setCustomState("")
-            setCustomCity("")
+          onClose()
+          setSuccess(false)
+          setFormData(initialFormState)
+          setShowCustomState(false)
+          setShowCustomCity(false)
+          setCustomState("")
+          setCustomCity("")
         }, 2500)
       } else {
         toast.error(data.error || "Submission failed.")
@@ -184,10 +183,10 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
           >
             {/* Close Button */}
             <div className="absolute right-4 top-4 z-10">
-               <button 
-                 onClick={onClose} 
-                 className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-               >
+              <button 
+                onClick={onClose} 
+                className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -218,179 +217,180 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
                     
                     {/* --- Personal Info --- */}
                     <div>
-                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-1">Personal Details</h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="firstName">First Name *</Label>
-                                <Input 
-                                    id="firstName" 
-                                    placeholder="First Name" 
-                                    value={formData.firstName}
-                                    onChange={(e) => setFormData(prev => ({...prev, firstName: e.target.value}))}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="lastName">Last Name</Label>
-                                <Input 
-                                    id="lastName" 
-                                    placeholder="Last Name" 
-                                    value={formData.lastName}
-                                    onChange={(e) => setFormData(prev => ({...prev, lastName: e.target.value}))}
-                                />
-                            </div>
+                      <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-1">Personal Details</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName">First Name *</Label>
+                          <Input 
+                            id="firstName" 
+                            placeholder="First Name" 
+                            value={formData.firstName}
+                            onChange={(e) => setFormData(prev => ({...prev, firstName: e.target.value}))}
+                            required
+                          />
                         </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName">Last Name</Label>
+                          <Input 
+                            id="lastName" 
+                            placeholder="Last Name" 
+                            value={formData.lastName}
+                            onChange={(e) => setFormData(prev => ({...prev, lastName: e.target.value}))}
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     {/* --- Contact Info --- */}
                     <div>
-                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-1">Contact Info</h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email *</Label>
-                                <Input 
-                                    id="email" 
-                                    type="email" 
-                                    placeholder="work@email.com"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="phone">Phone</Label>
-                                <Input 
-                                    id="phone" 
-                                    type="tel" 
-                                    placeholder="+91..."
-                                    value={formData.phone}
-                                    onChange={(e) => setFormData(prev => ({...prev, phone: e.target.value}))}
-                                />
-                            </div>
-                            <div className="space-y-2 sm:col-span-2">
-                                <Label htmlFor="website">Website (Optional)</Label>
-                                <Input 
-                                    id="website" 
-                                    type="url"
-                                    placeholder="https://yourcompany.com"
-                                    value={formData.website}
-                                    onChange={(e) => setFormData(prev => ({...prev, website: e.target.value}))}
-                                />
-                            </div>
+                      <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-1">Contact Info</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email *</Label>
+                          <Input 
+                            id="email" 
+                            type="email" 
+                            placeholder="work@email.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
+                            required
+                          />
                         </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">Phone</Label>
+                          <Input 
+                            id="phone" 
+                            type="tel" 
+                            placeholder="+91..."
+                            value={formData.phone}
+                            onChange={(e) => setFormData(prev => ({...prev, phone: e.target.value}))}
+                          />
+                        </div>
+                        
+                        {/* 🆕 NEW WHATSAPP FIELD */}
+                        <div className="space-y-2">
+                          <Label htmlFor="whatsappNo">WhatsApp No</Label>
+                          <Input 
+                            id="whatsappNo" 
+                            type="tel" 
+                            placeholder="+91..."
+                            value={formData.whatsappNo}
+                            onChange={(e) => setFormData(prev => ({...prev, whatsappNo: e.target.value}))}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="website">Website (Optional)</Label>
+                          <Input 
+                            id="website" 
+                            type="url"
+                            placeholder="https://yourcompany.com"
+                            value={formData.website}
+                            onChange={(e) => setFormData(prev => ({...prev, website: e.target.value}))}
+                          />
+                        </div>
+                      </div>
                     </div>
 
                     {/* --- Organization Info --- */}
                     <div>
-                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-1">Organization & Location</h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                             <div className="space-y-2">
-                                <Label htmlFor="company">Organization Name</Label>
-                                <Input 
-                                    id="company" 
-                                    placeholder="Company Name"
-                                    value={formData.company}
-                                    onChange={(e) => setFormData(prev => ({...prev, company: e.target.value}))}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="industry">Industry</Label>
-                                <select
-                                    id="industry"
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    value={formData.industry}
-                                    onChange={(e) => setFormData(prev => ({...prev, industry: e.target.value}))}
-                                >
-                                    <option value="">Select Industry</option>
-                                    {industries.map((ind) => (
-                                        <option key={ind.value} value={ind.value}>{ind.label}</option>
-                                    ))}
-                                </select>
-                            </div>
-                             <div className="space-y-2">
-                                <Label htmlFor="employees">No. of Employees</Label>
-                                <select
-                                    id="employees"
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    value={formData.noOfEmployees}
-                                    onChange={(e) => setFormData(prev => ({...prev, noOfEmployees: e.target.value}))}
-                                >
-                                    <option value="">Select Range</option>
-                                    {employeeRanges.map((range) => (
-                                        <option key={range.value} value={range.value}>{range.label}</option>
-                                    ))}
-                                </select>
-                            </div>
+                      <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-1">Organization & Location</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="company">Organization Name</Label>
+                          <Input 
+                            id="company" 
+                            placeholder="Company Name"
+                            value={formData.company}
+                            onChange={(e) => setFormData(prev => ({...prev, company: e.target.value}))}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="industry">Industry</Label>
+                          <select
+                            id="industry"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={formData.industry}
+                            onChange={(e) => setFormData(prev => ({...prev, industry: e.target.value}))}
+                          >
+                            <option value="">Select Industry</option>
+                            {industries.map((ind) => (
+                              <option key={ind.value} value={ind.value}>{ind.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="employees">No. of Employees</Label>
+                          <select
+                            id="employees"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={formData.noOfEmployees}
+                            onChange={(e) => setFormData(prev => ({...prev, noOfEmployees: e.target.value}))}
+                          >
+                            <option value="">Select Range</option>
+                            {employeeRanges.map((range) => (
+                              <option key={range.value} value={range.value}>{range.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* State/City */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="state">State</Label>
+                          <select
+                            id="state"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={showCustomState ? "other" : formData.state}
+                            onChange={(e) => handleStateChange(e.target.value)}
+                          >
+                            <option value="">Select State</option>
+                            {statesList.map((state) => (
+                              <option key={state} value={state}>{state}</option>
+                            ))}
+                            <option value="other">➕ Other</option>
+                          </select>
+                          {showCustomState && (
+                            <Input 
+                              placeholder="Enter State" 
+                              className="mt-2"
+                              value={customState}
+                              onChange={(e) => setCustomState(e.target.value)}
+                            />
+                          )}
                         </div>
 
-                        {/* State/City */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                             <div className="space-y-2">
-                                <Label htmlFor="state">State</Label>
-                                <select
-                                    id="state"
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    value={showCustomState ? "other" : formData.state}
-                                    onChange={(e) => handleStateChange(e.target.value)}
-                                >
-                                    <option value="">Select State</option>
-                                    {statesList.map((state) => (
-                                        <option key={state} value={state}>{state}</option>
-                                    ))}
-                                    <option value="other">➕ Other</option>
-                                </select>
-                                {showCustomState && (
-                                    <Input 
-                                        placeholder="Enter State" 
-                                        className="mt-2"
-                                        value={customState}
-                                        onChange={(e) => setCustomState(e.target.value)}
-                                    />
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="city">City</Label>
-                                <select
-                                    id="city"
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    value={showCustomCity && !showCustomState ? "other" : formData.city}
-                                    onChange={(e) => handleCityChange(e.target.value)}
-                                    disabled={!formData.state && !showCustomState}
-                                >
-                                    <option value="">
-                                        {!formData.state && !showCustomState ? "Select State First" : showCustomState ? "Enter City Below" : "Select City"}
-                                    </option>
-                                    {!showCustomState && availableCities.map((city) => (
-                                        <option key={city} value={city}>{city}</option>
-                                    ))}
-                                    {!showCustomState && formData.state && (
-                                        <option value="other">➕ Other</option>
-                                    )}
-                                </select>
-                                {(showCustomCity || showCustomState) && (
-                                    <Input 
-                                        placeholder="Enter City" 
-                                        className="mt-2"
-                                        value={customCity}
-                                        onChange={(e) => setCustomCity(e.target.value)}
-                                    />
-                                )}
-                            </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="city">City</Label>
+                          <select
+                            id="city"
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={showCustomCity && !showCustomState ? "other" : formData.city}
+                            onChange={(e) => handleCityChange(e.target.value)}
+                            disabled={!formData.state && !showCustomState}
+                          >
+                            <option value="">
+                              {!formData.state && !showCustomState ? "Select State First" : showCustomState ? "Enter City Below" : "Select City"}
+                            </option>
+                            {!showCustomState && availableCities.map((city) => (
+                              <option key={city} value={city}>{city}</option>
+                            ))}
+                            {!showCustomState && formData.state && (
+                              <option value="other">➕ Other</option>
+                            )}
+                          </select>
+                          {(showCustomCity || showCustomState) && (
+                            <Input 
+                              placeholder="Enter City" 
+                              className="mt-2"
+                              value={customCity}
+                              onChange={(e) => setCustomCity(e.target.value)}
+                            />
+                          )}
                         </div>
+                      </div>
                     </div>
-
-                    {/* --- Message --- */}
-                    {/* <div className="space-y-2">
-                        <Label htmlFor="message">Requirements / Message</Label>
-                        <textarea 
-                            id="message"
-                            className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
-                            placeholder="Tell us about your requirements..."
-                            value={formData.message}
-                            onChange={(e) => setFormData(prev => ({...prev, message: e.target.value}))}
-                        />
-                    </div> */}
 
                     <Button disabled={loading} type="submit" className="w-full btn-primary-custom h-12 text-base mt-4">
                       {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : 'Submit Request'}
@@ -406,85 +406,85 @@ const EnquiryModal = ({ isOpen, onClose, pageContext }: { isOpen: boolean; onClo
   )
 }
 
-// --- 3. MAIN COMPONENT ---
+// --- MAIN COMPONENT ---
 const RequestQuote = ({ pageContext = "General Inquiry" }: { pageContext?: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
       <section className="py-10 md:py-10">
-          <div className="container max-w-6xl px-4 md:px-8">
-            <motion.div 
-              className="text-center rounded-2xl py-16 px-6 relative overflow-hidden"
-              style={{
-                background: 'linear-gradient(to bottom, hsl(var(--accent)), hsl(var(--background)))'
-              }}
-              initial={{ opacity: 0, y: 30 }}
+        <div className="container max-w-6xl px-4 md:px-8">
+          <motion.div
+            className="text-center rounded-2xl py-16 px-6 relative overflow-hidden"
+            style={{
+              background: 'linear-gradient(to bottom, hsl(var(--accent)), hsl(var(--background)))'
+            }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.div
+              className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl"
+              style={{ backgroundColor: 'hsl(var(--primary) / 0.05)' }}
+              animate={{ scale: [1, 1.2, 1], x: [0, 20, 0], y: [0, 20, 0] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            <motion.h2 
+              className="text-3xl md:text-4xl font-bold font-headline mb-4 relative z-10"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ delay: 0.2 }}
+            >
+              Ready to Build Your Solution?
+            </motion.h2>
+            <motion.p 
+              className="text-lg max-w-2xl mx-auto mb-8 relative z-10"
+              style={{ color: 'hsl(var(--muted-foreground))' }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              Let's discuss your requirements for <strong>{pageContext}</strong> and build a custom roadmap.
+            </motion.p>
+            <motion.div 
+              className="flex flex-wrap gap-4 justify-center relative z-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
             >
               <motion.div
-                className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl"
-                style={{ backgroundColor: 'hsl(var(--primary) / 0.05)' }}
-                animate={{ scale: [1, 1.2, 1], x: [0, 20, 0], y: [0, 20, 0] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              />
-
-              <motion.h2 
-                className="text-3xl md:text-4xl font-bold font-headline mb-4 relative z-10"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Ready to Build Your Solution?
-              </motion.h2>
-              <motion.p 
-                className="text-lg max-w-2xl mx-auto mb-8 relative z-10"
-                style={{ color: 'hsl(var(--muted-foreground))' }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                Let's discuss your requirements for <strong>{pageContext}</strong> and build a custom roadmap.
-              </motion.p>
-              <motion.div 
-                className="flex flex-wrap gap-4 justify-center relative z-10"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                <Button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="btn-primary-custom h-11 px-8 text-base"
                 >
-                  <Button 
-                    onClick={() => setIsModalOpen(true)}
-                    className="btn-primary-custom h-11 px-8 text-base"
+                  For Inquiry
+                  <motion.span
+                    className="inline-block ml-2"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    For Inquiry
-                    <motion.span
-                      className="inline-block ml-2"
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                      <ArrowRight className="w-4 h-4" />
-                    </motion.span>
-                  </Button>
-                </motion.div>
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.span>
+                </Button>
               </motion.div>
             </motion.div>
-          </div>
-        </section>
+          </motion.div>
+        </div>
+      </section>
 
-        <EnquiryModal 
-            isOpen={isModalOpen} 
-            onClose={() => setIsModalOpen(false)}
-            pageContext={pageContext}
-        />
+      <EnquiryModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        pageContext={pageContext}
+      />
     </>
   )
 }
