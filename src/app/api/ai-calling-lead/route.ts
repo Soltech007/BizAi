@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     console.log("📥 Incoming Data:", JSON.stringify(body, null, 2));
 
-    // Validation
+    // 1. Validation
     if (!body.companyName || !body.contactPerson || !body.email || !body.phone) {
       return NextResponse.json(
         { error: "Required fields missing (Name, Email, Phone, Company)" },
@@ -50,18 +50,26 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Address Combine
+    // 2. ✅ NAME SPLIT LOGIC (Ye Full Name fix karega)
+    const fullName = body.contactPerson.trim();
+    const nameParts = fullName.split(" ");
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(" ") || ""; // Baaki ka hissa Last Name banega
+
+    // 3. Address Combine
     const fullAddress = [
       body.address,
       body.city ? `City: ${body.city}` : null,
-      body.state ? `State: ${body.state}` : null, // Added State here too
+      body.state ? `State: ${body.state}` : null,
       body.pincode ? `Pincode: ${body.pincode}` : null
     ].filter(Boolean).join(", ");
 
-    // ERP Payload
+    // 4. ERP Payload
     const payload: Record<string, any> = {
-      lead_name: body.contactPerson,
-      first_name: body.contactPerson.split(' ')[0],
+      lead_name: fullName,      // Full Name
+      first_name: firstName,    // Pehla Naam
+      last_name: lastName,      // Aakhri Naam (Added this)
+      
       company_name: body.companyName,
       email_id: body.email,
       mobile_no: body.phone,
@@ -69,7 +77,7 @@ export async function POST(req: NextRequest) {
       whatsapp_no: body.phone,
       
       city: body.city || "",
-      state: body.state || "", // ✅ State Field
+      state: body.state || "",
       address_line1: body.address || "",
       pincode: body.pincode || "",
       
@@ -84,7 +92,7 @@ export async function POST(req: NextRequest) {
 
     // Remove empty keys
     Object.keys(payload).forEach((key) => {
-      if (!payload[key]) delete payload[key];
+      if (!payload[key] && payload[key] !== "") delete payload[key];
     });
 
     console.log("📤 Sending Payload to ERP:", JSON.stringify(payload, null, 2));
@@ -100,21 +108,21 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
 
-    // 5. Handle Errors & Suppress WhatsApp/Mail Errors
+    // 5. Handle Errors & Suppress Automation Errors
     if (!response.ok) {
         const errorMsg = parseErrorMessage(data);
         console.error("❌ ERP Error Raw:", errorMsg);
 
-        // ✅ FIX: Ignore these specific automation errors
+        // ✅ FIX: Ignore WhatsApp/Automation specific errors
         const ignoredErrors = [
             "Connection refused",
             "Outgoing Mail Server",
             "WhatsApp",
             "Message Triggered",
-            "Triggered"
+            "Triggered",
+            "Contact ID" // Ye wala naya error bhi ignore hoga
         ];
 
-        // Check if error message contains any of the ignored strings
         const isIgnorableError = ignoredErrors.some(err => errorMsg.includes(err));
 
         if (isIgnorableError) {
