@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import SkipLink from "@/components/SkipLink"; // ✅ Add this import
+import SkipLink from "@/components/SkipLink";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bizaihacks.com"),
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
@@ -75,7 +75,28 @@ export default function RootLayout({
           }}
         />
 
-        {/* ✅ Structured Data - ADD THIS */}
+        {/* ✅ Meta / Facebook Pixel */}
+        <Script
+          id="facebook-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+
+              fbq('init', '${process.env.NEXT_PUBLIC_FB_PIXEL_ID}');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+
+        {/* ✅ Structured Data */}
         <Script
           id="structured-data"
           type="application/ld+json"
@@ -83,24 +104,25 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "name": "BizAI Hacks",
-              "url": "https://bizaihacks.com",
-              "logo": "https://bizaihacks.com/logo.jpg",
-              "description": "AI-driven business automation and enterprise solutions.",
-              "contactPoint": {
+              name: "BizAI Hacks",
+              url: "https://bizaihacks.com",
+              logo: "https://bizaihacks.com/logo.jpg",
+              description:
+                "AI-driven business automation and enterprise solutions.",
+              contactPoint: {
                 "@type": "ContactPoint",
-                "telephone": "+91-97237-23322",
-                "contactType": "customer service",
+                telephone: "+91-97237-23322",
+                contactType: "customer service",
               },
-              "sameAs": [
+              sameAs: [
                 "https://www.linkedin.com/company/bizaihacks/",
-                "https://www.facebook.com/bizaihacks/"
+                "https://www.facebook.com/bizaihacks/",
               ],
             }),
           }}
         />
 
-        {/* ✅ LLM & AI Crawlers Metadata */}
+        {/* ✅ SEO / AI Meta */}
         <meta
           name="robots"
           content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
@@ -108,14 +130,14 @@ export default function RootLayout({
         <meta name="ai" content="friendly" />
         <meta
           name="ai-description"
-          content="AI-driven business automation and enterprise chatbots powered by IBM Watsonx & Eleven Labs."
+          content="AI-driven business automation and enterprise chatbots."
         />
         <meta name="application-name" content="BizAI Hacks" />
         <meta name="theme-color" content="#000000" />
       </head>
 
       <body className="font-body antialiased">
-        {/* ✅ Google Tag Manager (noscript fallback) */}
+        {/* ✅ GTM noscript */}
         <noscript>
           <iframe
             title="Google Tag Manager"
@@ -126,15 +148,23 @@ export default function RootLayout({
           />
         </noscript>
 
-        {/* ✅ ADD SKIP LINK */}
+        {/* ✅ Meta Pixel noscript */}
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src={`https://www.facebook.com/tr?id=${process.env.NEXT_PUBLIC_FB_PIXEL_ID}&ev=PageView&noscript=1`}
+            alt=""
+          />
+        </noscript>
+
         <SkipLink />
 
-        {/* ✅ ADD main landmark with id */}
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>
 
-        {/* ✅ Toast Notifications */}
         <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
