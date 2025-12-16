@@ -1,17 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 import {
   Handshake,
@@ -19,13 +13,10 @@ import {
   User,
   Phone,
   Mail,
-  Briefcase,
   Globe,
   MapPin,
   IndianRupee,
   ChevronDown,
-  Search,
-  Plus,
   Check,
   Loader2,
   Sparkles,
@@ -34,163 +25,65 @@ import {
   Users,
   Building,
   FileText,
-  CreditCard,
-  Wallet,
-  UserCheck,
   Target,
   ArrowLeft,
   CheckCircle2,
   Shield,
+  MessageCircle,
 } from "lucide-react";
 
-// ✅ Complete Country List
-const allCountries = [
-  "Afghanistan", "Albania", "Algeria", "Argentina", "Australia", "Austria",
-  "Bahrain", "Bangladesh", "Belgium", "Bhutan", "Brazil", "Canada", "Chile",
-  "China", "Colombia", "Czech Republic", "Denmark", "Egypt", "Ethiopia",
-  "Finland", "France", "Germany", "Ghana", "Greece", "Hong Kong", "Hungary",
-  "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy",
-  "Japan", "Jordan", "Kazakhstan", "Kenya", "Kuwait", "Lebanon", "Malaysia",
-  "Maldives", "Mexico", "Morocco", "Myanmar", "Nepal", "Netherlands",
-  "New Zealand", "Nigeria", "Norway", "Oman", "Pakistan", "Philippines",
-  "Poland", "Portugal", "Qatar", "Romania", "Russia", "Saudi Arabia",
-  "Singapore", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sweden",
-  "Switzerland", "Taiwan", "Thailand", "Turkey", "UAE", "UK", "Ukraine",
-  "USA", "Vietnam", "Yemen", "Zimbabwe"
-].sort();
+// ✅ Industries List
+const industries = [
+  "Agriculture", "Automotive", "Banking", "Chemical", "Consulting", "Education",
+  "Financial Services", "Health Care", "Manufacturing", "Real Estate",
+  "Retail & Wholesale", "Software", "Technology", "Logistics & Warehousing", 
+  "IT Services", "E-Commerce", "Hospitality", "Media & Entertainment", "Other"
+];
 
-// ✅ City Database by Country
-const cityDatabase: Record<string, string[]> = {
-  India: [
-    "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Chennai", "Kolkata", "Pune",
-    "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore",
-    "Thane", "Bhopal", "Visakhapatnam", "Vadodara", "Patna", "Ludhiana",
-    "Agra", "Nashik", "Ranchi", "Faridabad", "Meerut", "Rajkot", "Varanasi",
-    "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", "Allahabad", "Guwahati",
-    "Chandigarh", "Noida", "Gurgaon", "Coimbatore", "Kochi", "Trivandrum",
-    "Mangalore", "Mysore", "Jodhpur", "Udaipur", "Dehradun", "Jammu"
-  ],
-  USA: [
-    "New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia",
-    "San Antonio", "San Diego", "Dallas", "San Jose", "Austin", "Jacksonville",
-    "Fort Worth", "Columbus", "Charlotte", "San Francisco", "Indianapolis",
-    "Seattle", "Denver", "Washington DC", "Boston", "Nashville", "Detroit",
-    "Portland", "Las Vegas", "Miami", "Atlanta", "Minneapolis"
-  ],
-  UK: [
-    "London", "Birmingham", "Manchester", "Glasgow", "Liverpool", "Leeds",
-    "Sheffield", "Edinburgh", "Bristol", "Leicester", "Coventry", "Bradford",
-    "Cardiff", "Belfast", "Nottingham", "Kingston upon Hull", "Newcastle"
-  ],
-  UAE: [
-    "Dubai", "Abu Dhabi", "Sharjah", "Ajman", "Ras Al Khaimah", "Fujairah",
-    "Umm Al Quwain", "Al Ain"
-  ],
-  Canada: [
-    "Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton", "Ottawa",
-    "Winnipeg", "Quebec City", "Hamilton", "Kitchener"
-  ],
-  Australia: [
-    "Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide", "Gold Coast",
-    "Canberra", "Newcastle", "Hobart", "Darwin"
-  ],
-  Singapore: ["Singapore"],
-  Germany: [
-    "Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt", "Stuttgart",
-    "Dusseldorf", "Leipzig", "Dortmund", "Essen"
-  ],
-  France: [
-    "Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Strasbourg",
-    "Montpellier", "Bordeaux", "Lille"
-  ],
-  Japan: [
-    "Tokyo", "Osaka", "Yokohama", "Nagoya", "Sapporo", "Fukuoka", "Kobe",
-    "Kyoto", "Kawasaki", "Saitama"
-  ],
-  China: [
-    "Shanghai", "Beijing", "Guangzhou", "Shenzhen", "Chengdu", "Hangzhou",
-    "Wuhan", "Xi'an", "Nanjing", "Tianjin"
-  ],
-  "Saudi Arabia": [
-    "Riyadh", "Jeddah", "Mecca", "Medina", "Dammam", "Khobar", "Tabuk"
-  ],
-  Qatar: ["Doha", "Al Wakrah", "Al Khor", "Umm Salal"],
-  Kuwait: ["Kuwait City", "Hawalli", "Salmiya", "Farwaniya"],
-  Bahrain: ["Manama", "Riffa", "Muharraq"],
-  Oman: ["Muscat", "Salalah", "Sohar", "Nizwa"],
+// ✅ Employee Ranges
+const employeeRanges = [
+  { value: "1-10", label: "1-10" },
+  { value: "11-50", label: "11-50" },
+  { value: "51-200", label: "51-200" },
+  { value: "201-500", label: "201-500" },
+  { value: "501-1000", label: "501-1000" },
+  { value: "1000+", label: "1000+" },
+];
+
+// ✅ States and Cities
+const statesAndCities: { [key: string]: string[] } = {
+  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Tirupati"],
+  "Delhi": ["New Delhi", "South Delhi", "North Delhi", "East Delhi"],
+  "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Vapi", "Gandhinagar"],
+  "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangalore"],
+  "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane", "Aurangabad"],
+  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
+  "Telangana": ["Hyderabad", "Warangal", "Secunderabad"],
+  "Uttar Pradesh": ["Lucknow", "Kanpur", "Noida", "Ghaziabad", "Agra", "Varanasi"],
+  "West Bengal": ["Kolkata", "Howrah", "Durgapur"],
+  "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
+  "Punjab": ["Ludhiana", "Amritsar", "Chandigarh", "Jalandhar"],
+  "Haryana": ["Gurgaon", "Faridabad", "Panipat", "Karnal"],
+  "Kerala": ["Kochi", "Trivandrum", "Kozhikode"],
+  "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior"],
+  "Bihar": ["Patna", "Gaya", "Muzaffarpur"],
+  "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela"],
 };
-
-// ✅ Business Types List
-const businessTypes = [
-  "Real Estate", "Automobile", "Agriculture & Agri-Tech", "Chemical & Industries",
-  "Healthcare", "Logistics", "Banking & Financial Services", "Education & EdTech",
-  "E-Commerce & Retail", "Reseller", "Consultant", "System Integrator",
-  "Value Added Reseller", "IT Services", "Manufacturing", "Hospitality",
-  "Media & Entertainment", "Telecom", "Digital Marketing Agency", "Freelancer", "Other"
-];
-
-// ✅ Lead Generation Methods for Sales Partner
-const leadGenerationMethods = [
-  { value: "Direct Sales", label: "Direct Sales", icon: "🎯" },
-  { value: "Reference Network", label: "Reference Network", icon: "🤝" },
-  { value: "Digital Marketing", label: "Digital Marketing", icon: "📱" },
-  { value: "Cold Calling", label: "Cold Calling", icon: "📞" },
-];
-
-// ✅ Experience Ranges
-const experienceRanges = [
-  { value: "0-1", label: "0-1 Year" },
-  { value: "1-3", label: "1-3 Years" },
-  { value: "3-5", label: "3-5 Years" },
-  { value: "5-10", label: "5-10 Years" },
-  { value: "10+", label: "10+ Years" },
-];
+const statesList = Object.keys(statesAndCities).sort();
 
 // ✅ Benefits Data
 const channelPartnerBenefits = [
-  {
-    icon: <TrendingUp className="w-5 h-5" />,
-    title: "High Revenue Share",
-    desc: "Up to 40% commission on deals",
-  },
-  {
-    icon: <BadgeCheck className="w-5 h-5" />,
-    title: "Certified Partner",
-    desc: "Official certification & badge",
-  },
-  {
-    icon: <Users className="w-5 h-5" />,
-    title: "Dedicated Support",
-    desc: "Priority partner assistance",
-  },
-  {
-    icon: <Sparkles className="w-5 h-5" />,
-    title: "Exclusive Access",
-    desc: "Early access to new products",
-  },
+  { icon: <TrendingUp className="w-5 h-5" />, title: "High Revenue Share", desc: "Up to 40% commission on deals" },
+  { icon: <BadgeCheck className="w-5 h-5" />, title: "Certified Partner", desc: "Official certification & badge" },
+  { icon: <Users className="w-5 h-5" />, title: "Dedicated Support", desc: "Priority partner assistance" },
+  { icon: <Sparkles className="w-5 h-5" />, title: "Exclusive Access", desc: "Early access to new products" },
 ];
 
 const salesPartnerBenefits = [
-  {
-    icon: <IndianRupee className="w-5 h-5" />,
-    title: "Attractive Commission",
-    desc: "Earn on every successful deal",
-  },
-  {
-    icon: <Target className="w-5 h-5" />,
-    title: "No Investment",
-    desc: "Start with zero investment",
-  },
-  {
-    icon: <Shield className="w-5 h-5" />,
-    title: "Full Support",
-    desc: "We handle invoicing & delivery",
-  },
-  {
-    icon: <TrendingUp className="w-5 h-5" />,
-    title: "Growth Path",
-    desc: "Scale to Channel Partner level",
-  },
+  { icon: <IndianRupee className="w-5 h-5" />, title: "Attractive Commission", desc: "Earn on every successful deal" },
+  { icon: <Target className="w-5 h-5" />, title: "No Investment", desc: "Start with zero investment" },
+  { icon: <Shield className="w-5 h-5" />, title: "Full Support", desc: "We handle invoicing & delivery" },
+  { icon: <TrendingUp className="w-5 h-5" />, title: "Growth Path", desc: "Scale to Channel Partner level" },
 ];
 
 // ✅ Partner Type Options
@@ -229,203 +122,95 @@ const partnerTypes = [
   },
 ];
 
-// ✅ Custom Input Style Class
-const inputClassName = "h-12 rounded-xl bg-white focus:ring-primary/20 shadow-sm";
+// ✅ Custom Input Style
+const inputClassName = "h-11 rounded-lg bg-white focus:ring-primary/20 shadow-sm border-slate-200";
+const selectClassName = "flex h-11 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring shadow-sm";
 
 export default function ChannelPartnerPremiumPage() {
-  // ✅ Partner Type Selection State
   const [selectedPartnerType, setSelectedPartnerType] = useState<"channel" | "sales" | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
-
-  // ✅ Common Form Data
-  const [formData, setFormData] = useState({
-    // Common Fields
-    companyName: "",
-    contactPerson: "",
-    contactNo: "",
-    email: "",
-    country: "",
-    city: "",
-    natureOfBusiness: "",
-    typeOfBusiness: "",
-    estimatedBusiness: "",
-    
-    // Channel Partner Specific
-    gstNumber: "",
-    panNumber: "",
-    yearsOfExperience: "",
-    
-    // Sales Partner Specific
-    partnerType: "", // Individual or Company
-    salesExperience: "",
-    preferredSalesArea: "",
-    leadGenerationMethods: [] as string[],
-    bankName: "",
-    accountHolderName: "",
-    accountNumber: "",
-    ifscCode: "",
-  });
-
   const [submitting, setSubmitting] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  // Country States
-  const [countrySearch, setCountrySearch] = useState("");
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [customCountry, setCustomCountry] = useState("");
-  const [showAddCountry, setShowAddCountry] = useState(false);
+  // ✅ Simplified Form Data State
+  const initialFormState = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    companyName: '',
+    website: '',
+    industry: '',
+    noOfEmployees: '',
+    state: '',
+    city: '',
+    gstNumber: '',
+  };
 
-  // City States
-  const [citySearch, setCitySearch] = useState("");
-  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const [formData, setFormData] = useState(initialFormState);
+
+  // Location States
+  const [showCustomState, setShowCustomState] = useState(false);
+  const [showCustomCity, setShowCustomCity] = useState(false);
+  const [customState, setCustomState] = useState("");
   const [customCity, setCustomCity] = useState("");
-  const [showAddCity, setShowAddCity] = useState(false);
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
 
-  // Business Type States
-  const [businessTypeSearch, setBusinessTypeSearch] = useState("");
-  const [showBusinessTypeDropdown, setShowBusinessTypeDropdown] = useState(false);
-  const [customBusinessType, setCustomBusinessType] = useState("");
-  const [showAddBusinessType, setShowAddBusinessType] = useState(false);
+  useEffect(() => {
+    if (formData.state && formData.state !== "other" && statesAndCities[formData.state]) {
+      setAvailableCities(statesAndCities[formData.state]);
+      setShowCustomCity(false);
+      setFormData(prev => ({ ...prev, city: "" }));
+    } else if (formData.state === "other") {
+      setAvailableCities([]);
+      setShowCustomCity(true);
+    } else {
+      setAvailableCities([]);
+    }
+  }, [formData.state]);
 
-  // Filtered Countries
-  const filteredCountries = useMemo(() => {
-    if (!countrySearch) return allCountries;
-    return allCountries.filter((c) =>
-      c.toLowerCase().includes(countrySearch.toLowerCase())
-    );
-  }, [countrySearch]);
-
-  // Available Cities based on selected country
-  const availableCities = useMemo(() => {
-    if (!formData.country) return [];
-    return cityDatabase[formData.country] || [];
-  }, [formData.country]);
-
-  // Filtered Cities
-  const filteredCities = useMemo(() => {
-    if (!citySearch) return availableCities;
-    return availableCities.filter((c) =>
-      c.toLowerCase().includes(citySearch.toLowerCase())
-    );
-  }, [citySearch, availableCities]);
-
-  // Filtered Business Types
-  const filteredBusinessTypes = useMemo(() => {
-    if (!businessTypeSearch) return businessTypes;
-    return businessTypes.filter((type) =>
-      type.toLowerCase().includes(businessTypeSearch.toLowerCase())
-    );
-  }, [businessTypeSearch]);
-
-  const handleChange = (key: string, value: string) =>
-    setFormData((s) => ({ ...s, [key]: value }));
-
-  // Select Country
-  const selectCountry = (country: string) => {
-    handleChange("country", country);
-    handleChange("city", "");
-    setCountrySearch("");
-    setShowCountryDropdown(false);
-    setShowAddCountry(false);
-    setCustomCountry("");
+  const handleChange = (key: string, value: string) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
   };
 
-  // Add Custom Country
-  const addCustomCountry = () => {
-    if (customCountry.trim()) {
-      selectCountry(customCountry.trim());
+  const handleStateChange = (value: string) => {
+    if (value === "other") {
+      setShowCustomState(true);
+      setFormData(prev => ({ ...prev, state: "other", city: "" }));
+    } else {
+      setShowCustomState(false);
+      setCustomState("");
+      setFormData(prev => ({ ...prev, state: value, city: "" }));
     }
   };
 
-  // Select City
-  const selectCity = (city: string) => {
-    handleChange("city", city);
-    setCitySearch("");
-    setShowCityDropdown(false);
-    setShowAddCity(false);
-    setCustomCity("");
-  };
-
-  // Add Custom City
-  const addCustomCity = () => {
-    if (customCity.trim()) {
-      selectCity(customCity.trim());
+  const handleCityChange = (value: string) => {
+    if (value === "other") {
+      setShowCustomCity(true);
+      setFormData(prev => ({ ...prev, city: "other" }));
+    } else {
+      setShowCustomCity(false);
+      setCustomCity("");
+      setFormData(prev => ({ ...prev, city: value }));
     }
   };
 
-  // Select Business Type
-  const selectBusinessType = (type: string) => {
-    handleChange("typeOfBusiness", type);
-    setBusinessTypeSearch("");
-    setShowBusinessTypeDropdown(false);
-    setShowAddBusinessType(false);
-    setCustomBusinessType("");
-  };
-
-  // Add Custom Business Type
-  const addCustomBusinessType = () => {
-    if (customBusinessType.trim()) {
-      selectBusinessType(customBusinessType.trim());
-    }
-  };
-
-  // Handle Lead Method Change (Sales Partner)
-  const handleLeadMethodChange = (method: string) => {
-    setFormData(prev => ({
-      ...prev,
-      leadGenerationMethods: prev.leadGenerationMethods.includes(method)
-        ? prev.leadGenerationMethods.filter(m => m !== method)
-        : [...prev.leadGenerationMethods, method]
-    }));
-  };
-
-  // Close all dropdowns
-  const closeAllDropdowns = () => {
-    setShowCountryDropdown(false);
-    setShowCityDropdown(false);
-    setShowBusinessTypeDropdown(false);
-  };
-
-  // Reset Form
   const resetForm = () => {
-    setFormData({
-      companyName: "",
-      contactPerson: "",
-      contactNo: "",
-      email: "",
-      country: "",
-      city: "",
-      natureOfBusiness: "",
-      typeOfBusiness: "",
-      estimatedBusiness: "",
-      gstNumber: "",
-      panNumber: "",
-      yearsOfExperience: "",
-      partnerType: "",
-      salesExperience: "",
-      preferredSalesArea: "",
-      leadGenerationMethods: [],
-      bankName: "",
-      accountHolderName: "",
-      accountNumber: "",
-      ifscCode: "",
-    });
+    setFormData(initialFormState);
     setAgreed(false);
     setSelectedPartnerType(null);
     setFormSubmitted(false);
+    setShowCustomState(false);
+    setShowCustomCity(false);
+    setCustomState("");
+    setCustomCity("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation
-    if (!formData.contactPerson || !formData.email || !formData.contactNo) {
-      toast.error("Please fill all required fields.");
-      return;
-    }
-
-    if (!formData.country || !formData.city) {
-      toast.error("Please select Country and City.");
+    if (!formData.firstName || !formData.email || !formData.phone) {
+      toast.error("Please fill Name, Email and Phone.");
       return;
     }
 
@@ -434,7 +219,6 @@ export default function ChannelPartnerPremiumPage() {
       return;
     }
 
-    // Channel Partner specific validation
     if (selectedPartnerType === "channel" && !formData.companyName) {
       toast.error("Company Name is required for Channel Partners.");
       return;
@@ -443,14 +227,25 @@ export default function ChannelPartnerPremiumPage() {
     try {
       setSubmitting(true);
 
+      const finalState = showCustomState ? customState : formData.state;
+      const finalCity = showCustomCity ? customCity : formData.city;
+
       const payload = {
-        ...formData,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        company: formData.companyName,
+        website: formData.website,
+        industry: formData.industry,
+        noOfEmployees: formData.noOfEmployees,
+        state: finalState,
+        city: finalCity,
+        gstNumber: formData.gstNumber,
         partnerCategory: selectedPartnerType === "channel" ? "Channel Partner" : "Sales Partner",
         source: `${selectedPartnerType === "channel" ? "Channel" : "Sales"} Partner Application Form`,
-        submittedAt: new Date().toISOString(),
       };
 
-      // API call
       const response = await fetch("/api/partner-application", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -461,9 +256,7 @@ export default function ChannelPartnerPremiumPage() {
 
       if (response.ok) {
         setFormSubmitted(true);
-        toast.success("🎉 Application submitted successfully!", {
-          duration: 5000,
-        });
+        toast.success("🎉 Application submitted successfully!", { duration: 5000 });
       } else {
         toast.error(data.error || "Submission failed. Please try again.");
       }
@@ -474,7 +267,6 @@ export default function ChannelPartnerPremiumPage() {
     }
   };
 
-  // Get current benefits based on selected partner type
   const currentBenefits = selectedPartnerType === "sales" ? salesPartnerBenefits : channelPartnerBenefits;
 
   return (
@@ -488,21 +280,16 @@ export default function ChannelPartnerPremiumPage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            {/* Badge */}
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
               <Handshake className="w-4 h-4" />
               Partner Program
             </span>
 
-            {/* Title */}
             <h1 className="text-3xl md:text-5xl font-bold text-slate-900 leading-tight">
               Grow Your Business with <br />
-              <span className="bg-primary bg-clip-text text-transparent">
-                BizAI Hacks
-              </span>
+              <span className="bg-primary bg-clip-text text-transparent">BizAI Hacks</span>
             </h1>
 
-            {/* Subtitle */}
             <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
               {selectedPartnerType 
                 ? selectedPartnerType === "channel"
@@ -512,7 +299,6 @@ export default function ChannelPartnerPremiumPage() {
               }
             </p>
 
-            {/* Benefits Grid */}
             <AnimatePresence mode="wait">
               <motion.div 
                 key={selectedPartnerType || "default"}
@@ -534,9 +320,7 @@ export default function ChannelPartnerPremiumPage() {
                     } flex items-center justify-center mx-auto mb-3`}>
                       {benefit.icon}
                     </div>
-                    <h3 className="font-semibold text-slate-900 text-sm">
-                      {benefit.title}
-                    </h3>
+                    <h3 className="font-semibold text-slate-900 text-sm">{benefit.title}</h3>
                     <p className="text-xs text-slate-500 mt-1">{benefit.desc}</p>
                   </motion.div>
                 ))}
@@ -549,10 +333,8 @@ export default function ChannelPartnerPremiumPage() {
       {/* ✅ MAIN CONTENT */}
       <div className="container mx-auto px-4 py-12 md:py-16">
         
-        {/* ============================================ */}
-        {/* STEP 1: PARTNER TYPE SELECTION */}
-        {/* ============================================ */}
         <AnimatePresence mode="wait">
+          {/* STEP 1: PARTNER TYPE SELECTION */}
           {!selectedPartnerType && !formSubmitted && (
             <motion.div
               key="partner-selection"
@@ -565,9 +347,7 @@ export default function ChannelPartnerPremiumPage() {
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
                   Select Your Partnership Type
                 </h2>
-                <p className="text-slate-600">
-                  Choose the model that best fits your business goals
-                </p>
+                <p className="text-slate-600">Choose the model that best fits your business goals</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -578,26 +358,15 @@ export default function ChannelPartnerPremiumPage() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 + index * 0.1 }}
                     onClick={() => setSelectedPartnerType(type.id as "channel" | "sales")}
-                    className={`relative cursor-pointer group`}
+                    className="relative cursor-pointer group"
                   >
                     <div className={`absolute -inset-0.5 bg-gradient-to-r ${type.color} rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity`} />
                     <div className={`relative bg-white rounded-2xl p-6 border-2 ${type.borderColor} hover:border-opacity-100 transition-all shadow-lg hover:shadow-xl`}>
-                      {/* Icon */}
                       <div className={`w-16 h-16 rounded-2xl ${type.bgColor} ${type.textColor} flex items-center justify-center mb-4`}>
                         {type.icon}
                       </div>
-
-                      {/* Title */}
-                      <h3 className="text-xl font-bold text-slate-900 mb-2">
-                        {type.title}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-slate-600 text-sm mb-4">
-                        {type.description}
-                      </p>
-
-                      {/* Features */}
+                      <h3 className="text-xl font-bold text-slate-900 mb-2">{type.title}</h3>
+                      <p className="text-slate-600 text-sm mb-4">{type.description}</p>
                       <ul className="space-y-2">
                         {type.features.map((feature, i) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
@@ -606,11 +375,7 @@ export default function ChannelPartnerPremiumPage() {
                           </li>
                         ))}
                       </ul>
-
-                      {/* CTA Button */}
-                      <Button
-                        className={`w-full mt-6 h-12 bg-gradient-to-r ${type.color} hover:opacity-90 text-white font-semibold rounded-xl`}
-                      >
+                      <Button className={`w-full mt-6 h-12 bg-gradient-to-r ${type.color} hover:opacity-90 text-white font-semibold rounded-xl`}>
                         Select {type.title}
                         <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
                       </Button>
@@ -619,21 +384,16 @@ export default function ChannelPartnerPremiumPage() {
                 ))}
               </div>
 
-              {/* Comparison Note */}
               <div className="mt-8 text-center">
                 <p className="text-sm text-slate-500">
                   Not sure which one to choose?{" "}
-                  <a href="/contact" className="text-primary hover:underline font-medium">
-                    Contact our partnership team
-                  </a>
+                  <a href="/contact" className="text-primary hover:underline font-medium">Contact our partnership team</a>
                 </p>
               </div>
             </motion.div>
           )}
 
-          {/* ============================================ */}
-          {/* STEP 2: FORM (Based on Selected Partner Type) */}
-          {/* ============================================ */}
+          {/* STEP 2: SIMPLIFIED FORM */}
           {selectedPartnerType && !formSubmitted && (
             <motion.div
               key="partner-form"
@@ -641,8 +401,7 @@ export default function ChannelPartnerPremiumPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
             >
-              {/* Back Button */}
-              <div className="max-w-5xl mx-auto mb-6">
+              <div className="max-w-4xl mx-auto mb-6">
                 <button
                   onClick={() => setSelectedPartnerType(null)}
                   className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-primary transition-colors"
@@ -672,7 +431,6 @@ export default function ChannelPartnerPremiumPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                       <div className="absolute left-6 right-6 bottom-8 text-white">
-                        {/* Partner Type Badge */}
                         <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-3 ${
                           selectedPartnerType === "channel" 
                             ? "bg-blue-500/80 text-white" 
@@ -686,10 +444,7 @@ export default function ChannelPartnerPremiumPage() {
                         </span>
 
                         <h2 className="text-2xl lg:text-3xl font-bold leading-tight drop-shadow-lg">
-                          {selectedPartnerType === "channel" 
-                            ? "Build & Scale Together"
-                            : "Earn Without Investment"
-                          }
+                          {selectedPartnerType === "channel" ? "Build & Scale Together" : "Earn Without Investment"}
                         </h2>
                         <p className="mt-2 text-white/90 text-sm lg:text-base">
                           {selectedPartnerType === "channel"
@@ -698,22 +453,17 @@ export default function ChannelPartnerPremiumPage() {
                           }
                         </p>
 
-                        {/* Stats */}
                         <div className="flex gap-6 mt-6">
                           <div>
-                            <p className="text-2xl font-bold">500+</p>
+                            <p className="text-2xl font-bold">50+</p>
                             <p className="text-xs text-white/70">Active Partners</p>
                           </div>
                           <div>
-                            <p className="text-2xl font-bold">
-                              {selectedPartnerType === "channel" ? "₹50Cr+" : "₹10Cr+"}
-                            </p>
+                            <p className="text-2xl font-bold">₹1Cr+</p>
                             <p className="text-xs text-white/70">Partner Revenue</p>
                           </div>
                           <div>
-                            <p className="text-2xl font-bold">
-                              {selectedPartnerType === "channel" ? "40%" : "25%"}
-                            </p>
+                            <p className="text-2xl font-bold">{selectedPartnerType === "channel" ? "40%" : "25%"}</p>
                             <p className="text-xs text-white/70">Commission</p>
                           </div>
                         </div>
@@ -721,13 +471,9 @@ export default function ChannelPartnerPremiumPage() {
                     </div>
                   </div>
 
-                  {/* Trust Badges */}
                   <div className="mt-6 flex flex-wrap gap-3 justify-center lg:justify-start">
                     {["ISO Certified", "GDPR Compliant", "24/7 Support"].map((badge) => (
-                      <span
-                        key={badge}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-xs font-medium text-slate-700 border shadow-sm"
-                      >
+                      <span key={badge} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-xs font-medium text-slate-700 border shadow-sm">
                         <Check className="w-3.5 h-3.5 text-green-500" />
                         {badge}
                       </span>
@@ -735,7 +481,7 @@ export default function ChannelPartnerPremiumPage() {
                   </div>
                 </motion.div>
 
-                {/* RIGHT – FORM */}
+                {/* RIGHT – SIMPLIFIED FORM */}
                 <motion.div
                   initial={{ x: 30, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -745,6 +491,7 @@ export default function ChannelPartnerPremiumPage() {
                   <div className={`bg-white border-2 ${
                     selectedPartnerType === "channel" ? "border-blue-200/80" : "border-green-200/80"
                   } rounded-3xl p-6 md:p-8 shadow-xl`}>
+                    
                     <div className="mb-6">
                       <div className="flex items-center gap-3 mb-2">
                         <div className={`p-2 rounded-xl ${
@@ -752,17 +499,10 @@ export default function ChannelPartnerPremiumPage() {
                             ? "bg-blue-100 text-blue-600" 
                             : "bg-green-100 text-green-600"
                         }`}>
-                          {selectedPartnerType === "channel" ? (
-                            <Building2 className="w-5 h-5" />
-                          ) : (
-                            <Target className="w-5 h-5" />
-                          )}
+                          {selectedPartnerType === "channel" ? <Building2 className="w-5 h-5" /> : <Target className="w-5 h-5" />}
                         </div>
                         <h3 className="text-xl md:text-2xl font-bold text-slate-900">
-                          {selectedPartnerType === "channel" 
-                            ? "Channel Partner Registration"
-                            : "Sales Partner Registration"
-                          }
+                          {selectedPartnerType === "channel" ? "Channel Partner Registration" : "Sales Partner Registration"}
                         </h3>
                       </div>
                       <p className="text-sm text-slate-500">
@@ -770,676 +510,234 @@ export default function ChannelPartnerPremiumPage() {
                       </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                      {/* ===== COMMON FIELDS ===== */}
+                    <form onSubmit={handleSubmit} className="space-y-6">
                       
-                      {/* Row 1: Company & Contact Person */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {/* Company Name - Required for Channel, Optional for Sales */}
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <Building2 className="w-4 h-4 text-slate-400" />
-                            Company Name {selectedPartnerType === "channel" && "*"}
-                          </label>
-                          <Input
-                            placeholder={selectedPartnerType === "sales" ? "Optional" : "Acme Pvt Ltd"}
-                            value={formData.companyName}
-                            onChange={(e) => handleChange("companyName", e.target.value)}
-                            className={inputClassName}
-                            disabled={submitting}
-                            required={selectedPartnerType === "channel"}
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <User className="w-4 h-4 text-slate-400" />
-                            {selectedPartnerType === "channel" ? "Contact Person *" : "Full Name *"}
-                          </label>
-                          <Input
-                            placeholder="John Doe"
-                            value={formData.contactPerson}
-                            onChange={(e) => handleChange("contactPerson", e.target.value)}
-                            className={inputClassName}
-                            disabled={submitting}
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      {/* Row 2: Phone & Email */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <Phone className="w-4 h-4 text-slate-400" />
-                            Contact Number *
-                          </label>
-                          <Input
-                            placeholder="+91 97237 23322"
-                            value={formData.contactNo}
-                            onChange={(e) => handleChange("contactNo", e.target.value)}
-                            className={inputClassName}
-                            disabled={submitting}
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <Mail className="w-4 h-4 text-slate-400" />
-                            Email ID *
-                          </label>
-                          <Input
-                            type="email"
-                            placeholder="partner@company.com"
-                            value={formData.email}
-                            onChange={(e) => handleChange("email", e.target.value)}
-                            className={inputClassName}
-                            disabled={submitting}
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      {/* Row 3: Country & City */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {/* COUNTRY DROPDOWN */}
-                        <div className="space-y-2 relative">
-                          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <Globe className="w-4 h-4 text-slate-400" />
-                            Country *
-                          </label>
-
-                          <div className="relative">
-                            <div
-                              className="flex items-center h-12 w-full rounded-xl border border-slate-200 bg-white px-4 cursor-pointer hover:border-primary/50 transition-colors shadow-sm"
-                              onClick={() => {
-                                setShowCountryDropdown(!showCountryDropdown);
-                                setShowCityDropdown(false);
-                                setShowBusinessTypeDropdown(false);
-                              }}
-                            >
-                              <span className={formData.country ? "text-slate-900" : "text-slate-400"}>
-                                {formData.country || "Select Country"}
-                              </span>
-                              <ChevronDown className={`w-4 h-4 ml-auto text-slate-400 transition-transform ${showCountryDropdown ? 'rotate-180' : ''}`} />
-                            </div>
-
-                            {showCountryDropdown && (
-                              <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl max-h-80 overflow-hidden"
-                              >
-                                <div className="p-3 border-b border-slate-100 sticky top-0 bg-white">
-                                  <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <Input
-                                      placeholder="Search country..."
-                                      value={countrySearch}
-                                      onChange={(e) => setCountrySearch(e.target.value)}
-                                      className="h-10 pl-10 rounded-lg bg-slate-50 border-slate-200"
-                                      autoFocus
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="max-h-52 overflow-y-auto">
-                                  {filteredCountries.length > 0 ? (
-                                    filteredCountries.map((country) => (
-                                      <div
-                                        key={country}
-                                        className={`px-4 py-3 hover:bg-primary/5 cursor-pointer flex items-center justify-between text-sm transition-colors ${
-                                          formData.country === country ? 'bg-primary/10 text-primary' : 'text-slate-700'
-                                        }`}
-                                        onClick={() => selectCountry(country)}
-                                      >
-                                        {country}
-                                        {formData.country === country && (
-                                          <Check className="w-4 h-4 text-primary" />
-                                        )}
-                                      </div>
-                                    ))
-                                  ) : (
-                                    <div className="px-4 py-6 text-center text-slate-400 text-sm">
-                                      No country found
-                                    </div>
-                                  )}
-                                </div>
-
-                                <div className="p-3 border-t border-slate-100 bg-slate-50">
-                                  {!showAddCountry ? (
-                                    <button
-                                      type="button"
-                                      className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-primary font-medium hover:bg-primary/10 rounded-lg transition-colors"
-                                      onClick={() => setShowAddCountry(true)}
-                                    >
-                                      <Plus className="w-4 h-4" />
-                                      Add Custom Country
-                                    </button>
-                                  ) : (
-                                    <div className="flex gap-2">
-                                      <Input
-                                        placeholder="Enter country name"
-                                        value={customCountry}
-                                        onChange={(e) => setCustomCountry(e.target.value)}
-                                        className="h-10 flex-1 rounded-lg bg-white"
-                                        autoFocus
-                                        onKeyDown={(e) => {
-                                          if (e.key === "Enter") {
-                                            e.preventDefault();
-                                            addCustomCountry();
-                                          }
-                                        }}
-                                      />
-                                      <Button
-                                        type="button"
-                                        size="sm"
-                                        onClick={addCustomCountry}
-                                        className="h-10 px-4 rounded-lg"
-                                      >
-                                        Add
-                                      </Button>
-                                    </div>
-                                  )}
-                                </div>
-                              </motion.div>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* CITY DROPDOWN */}
-                        <div className="space-y-2 relative">
-                          <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-slate-400" />
-                            City *
-                          </label>
-
-                          <div className="relative">
-                            <div
-                              className={`flex items-center h-12 w-full rounded-xl border border-slate-200 bg-white px-4 transition-colors shadow-sm ${
-                                !formData.country
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : "cursor-pointer hover:border-primary/50"
-                              }`}
-                              onClick={() => {
-                                if (formData.country) {
-                                  setShowCityDropdown(!showCityDropdown);
-                                  setShowCountryDropdown(false);
-                                  setShowBusinessTypeDropdown(false);
-                                }
-                              }}
-                            >
-                              <span className={formData.city ? "text-slate-900" : "text-slate-400"}>
-                                {!formData.country
-                                  ? "Select Country First"
-                                  : formData.city || "Select City"}
-                              </span>
-                              <ChevronDown className={`w-4 h-4 ml-auto text-slate-400 transition-transform ${showCityDropdown ? 'rotate-180' : ''}`} />
-                            </div>
-
-                            {showCityDropdown && formData.country && (
-                              <motion.div
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl max-h-80 overflow-hidden"
-                              >
-                                <div className="p-3 border-b border-slate-100 sticky top-0 bg-white">
-                                  <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                    <Input
-                                      placeholder="Search city..."
-                                      value={citySearch}
-                                      onChange={(e) => setCitySearch(e.target.value)}
-                                      className="h-10 pl-10 rounded-lg bg-slate-50 border-slate-200"
-                                      autoFocus
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="max-h-52 overflow-y-auto">
-                                  {filteredCities.length > 0 ? (
-                                    filteredCities.map((city) => (
-                                      <div
-                                        key={city}
-                                        className={`px-4 py-3 hover:bg-primary/5 cursor-pointer flex items-center justify-between text-sm transition-colors ${
-                                          formData.city === city ? 'bg-primary/10 text-primary' : 'text-slate-700'
-                                        }`}
-                                        onClick={() => selectCity(city)}
-                                      >
-                                        {city}
-                                        {formData.city === city && (
-                                          <Check className="w-4 h-4 text-primary" />
-                                        )}
-                                      </div>
-                                    ))
-                                  ) : availableCities.length === 0 ? (
-                                    <div className="px-4 py-6 text-center text-slate-400 text-sm">
-                                      No cities available. Add custom city below.
-                                    </div>
-                                  ) : (
-                                    <div className="px-4 py-6 text-center text-slate-400 text-sm">
-                                      No city found
-                                    </div>
-                                  )}
-                                </div>
-
-                                <div className="p-3 border-t border-slate-100 bg-slate-50">
-                                  {!showAddCity ? (
-                                    <button
-                                      type="button"
-                                      className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-primary font-medium hover:bg-primary/10 rounded-lg transition-colors"
-                                      onClick={() => setShowAddCity(true)}
-                                    >
-                                      <Plus className="w-4 h-4" />
-                                      Add Custom City
-                                    </button>
-                                  ) : (
-                                    <div className="flex gap-2">
-                                      <Input
-                                        placeholder="Enter city name"
-                                        value={customCity}
-                                        onChange={(e) => setCustomCity(e.target.value)}
-                                        className="h-10 flex-1 rounded-lg bg-white"
-                                        autoFocus
-                                        onKeyDown={(e) => {
-                                          if (e.key === "Enter") {
-                                            e.preventDefault();
-                                            addCustomCity();
-                                          }
-                                        }}
-                                      />
-                                      <Button
-                                        type="button"
-                                        size="sm"
-                                        onClick={addCustomCity}
-                                        className="h-10 px-4 rounded-lg"
-                                      >
-                                        Add
-                                      </Button>
-                                    </div>
-                                  )}
-                                </div>
-                              </motion.div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* ===== CHANNEL PARTNER SPECIFIC FIELDS ===== */}
-                      {selectedPartnerType === "channel" && (
-                        <>
-                          {/* Nature of Business */}
+                      {/* ===== Personal Details ===== */}
+                      <div>
+                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-2 flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          Personal Details
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                              <Briefcase className="w-4 h-4 text-slate-400" />
-                              Nature of Business
-                            </label>
-                            <Input
-                              placeholder="SaaS / System Integrator / IT Services"
-                              value={formData.natureOfBusiness}
-                              onChange={(e) => handleChange("natureOfBusiness", e.target.value)}
+                            <Label htmlFor="firstName">First Name *</Label>
+                            <Input 
+                              id="firstName" 
+                              placeholder="John" 
+                              value={formData.firstName}
+                              onChange={(e) => handleChange("firstName", e.target.value)}
+                              className={inputClassName}
+                              required
+                              disabled={submitting}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <Input 
+                              id="lastName" 
+                              placeholder="Doe" 
+                              value={formData.lastName}
+                              onChange={(e) => handleChange("lastName", e.target.value)}
                               className={inputClassName}
                               disabled={submitting}
                             />
                           </div>
+                        </div>
+                      </div>
 
-                          {/* Type of Business & Estimated Business */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {/* TYPE OF BUSINESS */}
-                            <div className="space-y-2 relative">
-                              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                <Building className="w-4 h-4 text-slate-400" />
-                                Type of Business
-                              </label>
-
-                              <div className="relative">
-                                <div
-                                  className="flex items-center h-12 w-full rounded-xl border border-slate-200 bg-white px-4 cursor-pointer hover:border-primary/50 transition-colors shadow-sm"
-                                  onClick={() => {
-                                    setShowBusinessTypeDropdown(!showBusinessTypeDropdown);
-                                    setShowCountryDropdown(false);
-                                    setShowCityDropdown(false);
-                                  }}
-                                >
-                                  <span className={formData.typeOfBusiness ? "text-slate-900" : "text-slate-400"}>
-                                    {formData.typeOfBusiness || "Select Type"}
-                                  </span>
-                                  <ChevronDown className={`w-4 h-4 ml-auto text-slate-400 transition-transform ${showBusinessTypeDropdown ? 'rotate-180' : ''}`} />
-                                </div>
-
-                                {showBusinessTypeDropdown && (
-                                  <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl max-h-80 overflow-hidden"
-                                  >
-                                    <div className="p-3 border-b border-slate-100 sticky top-0 bg-white">
-                                      <div className="relative">
-                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                                        <Input
-                                          placeholder="Search business type..."
-                                          value={businessTypeSearch}
-                                          onChange={(e) => setBusinessTypeSearch(e.target.value)}
-                                          className="h-10 pl-10 rounded-lg bg-slate-50 border-slate-200"
-                                          autoFocus
-                                        />
-                                      </div>
-                                    </div>
-
-                                    <div className="max-h-52 overflow-y-auto">
-                                      {filteredBusinessTypes.length > 0 ? (
-                                        filteredBusinessTypes.map((type) => (
-                                          <div
-                                            key={type}
-                                            className={`px-4 py-3 hover:bg-primary/5 cursor-pointer flex items-center justify-between text-sm transition-colors ${
-                                              formData.typeOfBusiness === type ? 'bg-primary/10 text-primary' : 'text-slate-700'
-                                            }`}
-                                            onClick={() => selectBusinessType(type)}
-                                          >
-                                            {type}
-                                            {formData.typeOfBusiness === type && (
-                                              <Check className="w-4 h-4 text-primary" />
-                                            )}
-                                          </div>
-                                        ))
-                                      ) : (
-                                        <div className="px-4 py-6 text-center text-slate-400 text-sm">
-                                          No business type found
-                                        </div>
-                                      )}
-                                    </div>
-
-                                    <div className="p-3 border-t border-slate-100 bg-slate-50">
-                                      {!showAddBusinessType ? (
-                                        <button
-                                          type="button"
-                                          className="w-full flex items-center justify-center gap-2 py-2.5 text-sm text-primary font-medium hover:bg-primary/10 rounded-lg transition-colors"
-                                          onClick={() => setShowAddBusinessType(true)}
-                                        >
-                                          <Plus className="w-4 h-4" />
-                                          Add Custom Type
-                                        </button>
-                                      ) : (
-                                        <div className="flex gap-2">
-                                          <Input
-                                            placeholder="Enter business type"
-                                            value={customBusinessType}
-                                            onChange={(e) => setCustomBusinessType(e.target.value)}
-                                            className="h-10 flex-1 rounded-lg bg-white"
-                                            autoFocus
-                                            onKeyDown={(e) => {
-                                              if (e.key === "Enter") {
-                                                e.preventDefault();
-                                                addCustomBusinessType();
-                                              }
-                                            }}
-                                          />
-                                          <Button
-                                            type="button"
-                                            size="sm"
-                                            onClick={addCustomBusinessType}
-                                            className="h-10 px-4 rounded-lg"
-                                          >
-                                            Add
-                                          </Button>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </div>
-                            </div>
-
-                            {/* ESTIMATED BUSINESS */}
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                <IndianRupee className="w-4 h-4 text-slate-400" />
-                                Estimated Business
-                              </label>
-                              <Select
-                                onValueChange={(v) => handleChange("estimatedBusiness", v)}
+                      {/* ===== Contact Info ===== */}
+                      <div>
+                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-2 flex items-center gap-2">
+                          <Phone className="w-4 h-4" />
+                          Contact Information
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="email">Email *</Label>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <Input 
+                                id="email" 
+                                type="email"
+                                placeholder="partner@company.com" 
+                                value={formData.email}
+                                onChange={(e) => handleChange("email", e.target.value)}
+                                className={`${inputClassName} pl-10`}
+                                required
                                 disabled={submitting}
-                              >
-                                <SelectTrigger className="h-12 rounded-xl bg-white border-slate-200 shadow-sm hover:border-primary/50 transition-colors">
-                                  <SelectValue placeholder="Select Range" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-white border border-slate-200 rounded-xl shadow-2xl">
-                                  <SelectItem value="< ₹5 Lakhs">{"< ₹5 Lakhs"}</SelectItem>
-                                  <SelectItem value="₹5L - ₹20L">₹5L - ₹20L</SelectItem>
-                                  <SelectItem value="₹20L - ₹50L">₹20L - ₹50L</SelectItem>
-                                  <SelectItem value="₹50L - ₹1Cr">₹50L - ₹1Cr</SelectItem>
-                                  <SelectItem value="> ₹1 Crore">{"> ₹1 Crore"}</SelectItem>
-                                </SelectContent>
-                              </Select>
+                              />
                             </div>
                           </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="phone">Phone *</Label>
+                            <div className="relative">
+                              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <Input 
+                                id="phone" 
+                                type="tel"
+                                placeholder="+91 98765 43210" 
+                                value={formData.phone}
+                                onChange={(e) => handleChange("phone", e.target.value)}
+                                className={`${inputClassName} pl-10`}
+                                required
+                                disabled={submitting}
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="website">Website (Optional)</Label>
+                            <div className="relative">
+                              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <Input 
+                                id="website" 
+                                type="url"
+                                placeholder="https://yourcompany.com" 
+                                value={formData.website}
+                                onChange={(e) => handleChange("website", e.target.value)}
+                                className={`${inputClassName} pl-10`}
+                                disabled={submitting}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-                          {/* GST & PAN */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-slate-400" />
-                                GST Number
-                              </label>
-                              <Input
+                      {/* ===== Company & Business ===== */}
+                      <div>
+                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-2 flex items-center gap-2">
+                          <Building className="w-4 h-4" />
+                          Company Info
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="companyName">
+                              Company Name {selectedPartnerType === "channel" && "*"}
+                            </Label>
+                            <div className="relative">
+                              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <Input 
+                                id="companyName" 
+                                placeholder={selectedPartnerType === "sales" ? "Optional" : "Acme Pvt Ltd"}
+                                value={formData.companyName}
+                                onChange={(e) => handleChange("companyName", e.target.value)}
+                                className={`${inputClassName} pl-10`}
+                                required={selectedPartnerType === "channel"}
+                                disabled={submitting}
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="industry">Industry</Label>
+                            <select
+                              id="industry"
+                              className={selectClassName}
+                              value={formData.industry}
+                              onChange={(e) => handleChange("industry", e.target.value)}
+                              disabled={submitting}
+                            >
+                              <option value="">Select Industry</option>
+                              {industries.map((ind) => (
+                                <option key={ind} value={ind}>{ind}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="noOfEmployees">No. of Employees</Label>
+                            <select
+                              id="noOfEmployees"
+                              className={selectClassName}
+                              value={formData.noOfEmployees}
+                              onChange={(e) => handleChange("noOfEmployees", e.target.value)}
+                              disabled={submitting}
+                            >
+                              <option value="">Select Range</option>
+                              {employeeRanges.map((range) => (
+                                <option key={range.value} value={range.value}>{range.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="gstNumber">GST Number</Label>
+                            <div className="relative">
+                              <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                              <Input 
+                                id="gstNumber" 
                                 placeholder="27AABCU9603R1ZM"
                                 value={formData.gstNumber}
                                 onChange={(e) => handleChange("gstNumber", e.target.value.toUpperCase())}
-                                className={inputClassName}
-                                disabled={submitting}
+                                className={`${inputClassName} pl-10`}
                                 maxLength={15}
-                              />
-                            </div>
-
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-slate-400" />
-                                PAN Number
-                              </label>
-                              <Input
-                                placeholder="ABCDE1234F"
-                                value={formData.panNumber}
-                                onChange={(e) => handleChange("panNumber", e.target.value.toUpperCase())}
-                                className={inputClassName}
                                 disabled={submitting}
-                                maxLength={10}
                               />
                             </div>
                           </div>
-                        </>
-                      )}
+                        </div>
+                      </div>
 
-                      {/* ===== SALES PARTNER SPECIFIC FIELDS ===== */}
-                      {selectedPartnerType === "sales" && (
-                        <>
-                          {/* Individual or Company */}
+                      {/* ===== Location ===== */}
+                      <div>
+                        <h4 className="text-xs font-bold text-muted-foreground mb-3 uppercase tracking-wider border-b pb-2 flex items-center gap-2">
+                          <MapPin className="w-4 h-4" />
+                          Location
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700">
-                              Are you an Individual or Company? *
-                            </label>
-                            <div className="flex gap-4">
-                              <label className={`flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                                formData.partnerType === 'Individual' 
-                                  ? 'border-green-500 bg-green-50' 
-                                  : 'border-slate-200 hover:border-green-300'
-                              }`}>
-                                <input
-                                  type="radio"
-                                  name="partnerType"
-                                  value="Individual"
-                                  checked={formData.partnerType === 'Individual'}
-                                  onChange={(e) => handleChange("partnerType", e.target.value)}
-                                  className="sr-only"
-                                />
-                                <User className={`w-5 h-5 ${formData.partnerType === 'Individual' ? 'text-green-600' : 'text-slate-400'}`} />
-                                <span className={`font-medium ${formData.partnerType === 'Individual' ? 'text-green-700' : 'text-slate-700'}`}>
-                                  Individual
-                                </span>
-                              </label>
-                              <label className={`flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                                formData.partnerType === 'Company' 
-                                  ? 'border-green-500 bg-green-50' 
-                                  : 'border-slate-200 hover:border-green-300'
-                              }`}>
-                                <input
-                                  type="radio"
-                                  name="partnerType"
-                                  value="Company"
-                                  checked={formData.partnerType === 'Company'}
-                                  onChange={(e) => handleChange("partnerType", e.target.value)}
-                                  className="sr-only"
-                                />
-                                <Building2 className={`w-5 h-5 ${formData.partnerType === 'Company' ? 'text-green-600' : 'text-slate-400'}`} />
-                                <span className={`font-medium ${formData.partnerType === 'Company' ? 'text-green-700' : 'text-slate-700'}`}>
-                                  Company
-                                </span>
-                              </label>
-                            </div>
-                          </div>
-
-                          {/* Sales Experience & Preferred Area */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                <Briefcase className="w-4 h-4 text-slate-400" />
-                                Sales Experience
-                              </label>
-                              <Select
-                                onValueChange={(v) => handleChange("salesExperience", v)}
-                                disabled={submitting}
-                              >
-                                <SelectTrigger className="h-12 rounded-xl bg-white border-slate-200 shadow-sm">
-                                  <SelectValue placeholder="Select Experience" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-white rounded-xl shadow-2xl">
-                                  {experienceRanges.map((range) => (
-                                    <SelectItem key={range.value} value={range.value}>
-                                      {range.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </div>
-
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-slate-400" />
-                                Preferred Sales Area
-                              </label>
-                              <Input
-                                placeholder="e.g., Mumbai, Maharashtra"
-                                value={formData.preferredSalesArea}
-                                onChange={(e) => handleChange("preferredSalesArea", e.target.value)}
-                                className={inputClassName}
-                                disabled={submitting}
-                              />
-                            </div>
-                          </div>
-
-                          {/* Lead Generation Methods */}
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                              <Target className="w-4 h-4 text-slate-400" />
-                              How will you generate leads? (Select all that apply)
-                            </label>
-                            <div className="grid grid-cols-2 gap-3">
-                              {leadGenerationMethods.map((method) => (
-                                <label
-                                  key={method.value}
-                                  className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                                    formData.leadGenerationMethods.includes(method.value)
-                                      ? 'border-green-500 bg-green-50'
-                                      : 'border-slate-200 hover:border-green-300'
-                                  }`}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={formData.leadGenerationMethods.includes(method.value)}
-                                    onChange={() => handleLeadMethodChange(method.value)}
-                                    className="sr-only"
-                                  />
-                                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                                    formData.leadGenerationMethods.includes(method.value) 
-                                      ? 'bg-green-500 border-green-500' 
-                                      : 'border-slate-300'
-                                  }`}>
-                                    {formData.leadGenerationMethods.includes(method.value) && (
-                                      <Check className="w-3 h-3 text-white" />
-                                    )}
-                                  </div>
-                                  <span className="text-lg">{method.icon}</span>
-                                  <span className="font-medium text-sm text-slate-700">{method.label}</span>
-                                </label>
+                            <Label htmlFor="state">State</Label>
+                            <select
+                              id="state"
+                              className={selectClassName}
+                              value={showCustomState ? "other" : formData.state}
+                              onChange={(e) => handleStateChange(e.target.value)}
+                              disabled={submitting}
+                            >
+                              <option value="">Select State</option>
+                              {statesList.map((state) => (
+                                <option key={state} value={state}>{state}</option>
                               ))}
-                            </div>
+                              <option value="other">➕ Other</option>
+                            </select>
+                            {showCustomState && (
+                              <Input 
+                                placeholder="Enter State" 
+                                className={`${inputClassName} mt-2`}
+                                value={customState}
+                                onChange={(e) => setCustomState(e.target.value)}
+                                disabled={submitting}
+                              />
+                            )}
                           </div>
 
-                          {/* Bank Details (Optional) */}
-                          <div className="space-y-4 p-4 bg-amber-50 rounded-xl border border-amber-200">
-                            <div className="flex items-center gap-2">
-                              <Wallet className="w-5 h-5 text-amber-600" />
-                              <h4 className="font-medium text-amber-800">Bank Details (Optional)</h4>
-                            </div>
-                            <p className="text-xs text-amber-700">
-                              You can provide bank details later. These are only required when you're ready to receive commission payouts.
-                            </p>
-                            
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                  <CreditCard className="w-4 h-4 text-slate-400" />
-                                  Bank Name
-                                </label>
-                                <Input
-                                  placeholder="e.g., HDFC Bank"
-                                  value={formData.bankName}
-                                  onChange={(e) => handleChange("bankName", e.target.value)}
-                                  className={inputClassName}
-                                  disabled={submitting}
-                                />
-                              </div>
-
-                              <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                                  <UserCheck className="w-4 h-4 text-slate-400" />
-                                  Account Holder Name
-                                </label>
-                                <Input
-                                  placeholder="As per bank records"
-                                  value={formData.accountHolderName}
-                                  onChange={(e) => handleChange("accountHolderName", e.target.value)}
-                                  className={inputClassName}
-                                  disabled={submitting}
-                                />
-                              </div>
-
-                              <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700">Account Number</label>
-                                <Input
-                                  placeholder="Enter Account Number"
-                                  value={formData.accountNumber}
-                                  onChange={(e) => handleChange("accountNumber", e.target.value.replace(/\D/g, ''))}
-                                  className={inputClassName}
-                                  disabled={submitting}
-                                />
-                              </div>
-
-                              <div className="space-y-2">
-                                <label className="text-sm font-medium text-slate-700">IFSC Code</label>
-                                <Input
-                                  placeholder="e.g., HDFC0001234"
-                                  value={formData.ifscCode}
-                                  onChange={(e) => handleChange("ifscCode", e.target.value.toUpperCase())}
-                                  className={inputClassName}
-                                  disabled={submitting}
-                                  maxLength={11}
-                                />
-                              </div>
-                            </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="city">City</Label>
+                            <select
+                              id="city"
+                              className={selectClassName}
+                              value={showCustomCity && !showCustomState ? "other" : formData.city}
+                              onChange={(e) => handleCityChange(e.target.value)}
+                              disabled={!formData.state && !showCustomState || submitting}
+                            >
+                              <option value="">
+                                {!formData.state && !showCustomState ? "Select State First" : showCustomState ? "Enter City Below" : "Select City"}
+                              </option>
+                              {!showCustomState && availableCities.map((city) => (
+                                <option key={city} value={city}>{city}</option>
+                              ))}
+                              {!showCustomState && formData.state && (
+                                <option value="other">➕ Other</option>
+                              )}
+                            </select>
+                            {(showCustomCity || showCustomState) && (
+                              <Input 
+                                placeholder="Enter City" 
+                                className={`${inputClassName} mt-2`}
+                                value={customCity}
+                                onChange={(e) => setCustomCity(e.target.value)}
+                                disabled={submitting}
+                              />
+                            )}
                           </div>
-                        </>
-                      )}
+                        </div>
+                      </div>
 
                       {/* ===== AGREEMENT ===== */}
                       <div className={`p-4 rounded-xl border-2 ${
@@ -1457,18 +755,18 @@ export default function ChannelPartnerPremiumPage() {
                                 ? "text-blue-600 focus:ring-blue-500" 
                                 : "text-green-600 focus:ring-green-500"
                             }`}
+                            disabled={submitting}
                           />
                           <span className="text-sm leading-relaxed text-slate-700">
                             {selectedPartnerType === "channel" ? (
                               <>
                                 <strong>Declaration:</strong> I understand that sales invoice will be generated by me (Channel Partner) 
-                                and BizAiHacks will provide solutions/products. I agree to the terms and conditions of the partnership program.
+                                and BizAiHacks will provide solutions/products. I agree to the terms and conditions.
                               </>
                             ) : (
                               <>
                                 <strong>Agreement:</strong> I understand that sales invoice will be generated by BizAiHacks 
-                                and commission will be paid as per company policy. I agree to work as a Sales Partner and 
-                                adhere to the partnership guidelines.
+                                and commission will be paid as per company policy. I agree to the partnership guidelines.
                               </>
                             )}
                           </span>
@@ -1478,7 +776,7 @@ export default function ChannelPartnerPremiumPage() {
                       {/* Submit Button */}
                       <Button
                         type="submit"
-                        className={`w-full h-14 text-base font-semibold mt-4 rounded-xl shadow-lg hover:shadow-xl transition-all ${
+                        className={`w-full h-14 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all ${
                           selectedPartnerType === "sales" 
                             ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700" 
                             : ""
@@ -1492,27 +790,17 @@ export default function ChannelPartnerPremiumPage() {
                           </>
                         ) : (
                           <>
-                            {selectedPartnerType === "channel" ? (
-                              <Building2 className="w-5 h-5 mr-2" />
-                            ) : (
-                              <Target className="w-5 h-5 mr-2" />
-                            )}
+                            {selectedPartnerType === "channel" ? <Building2 className="w-5 h-5 mr-2" /> : <Target className="w-5 h-5 mr-2" />}
                             Apply as {selectedPartnerType === "channel" ? "Channel" : "Sales"} Partner
                           </>
                         )}
                       </Button>
 
-                      {/* Footer Note */}
                       <p className="text-xs text-center text-slate-400 mt-4">
                         By submitting, you agree to our{" "}
-                        <a href="/termsandconditions" className="text-primary hover:underline">
-                          Terms & Conditions
-                        </a>{" "}
+                        <a href="/termsandconditions" className="text-primary hover:underline">Terms</a>{" "}
                         and{" "}
-                        <a href="/privacypolicy" className="text-primary hover:underline">
-                          Privacy Policy
-                        </a>
-                        .
+                        <a href="/privacypolicy" className="text-primary hover:underline">Privacy Policy</a>.
                       </p>
                     </form>
                   </div>
@@ -1521,9 +809,7 @@ export default function ChannelPartnerPremiumPage() {
             </motion.div>
           )}
 
-          {/* ============================================ */}
           {/* SUCCESS STATE */}
-          {/* ============================================ */}
           {formSubmitted && (
             <motion.div
               key="success-state"
@@ -1539,32 +825,21 @@ export default function ChannelPartnerPremiumPage() {
                 <CheckCircle2 className="w-12 h-12" />
               </div>
               
-              <h2 className="text-3xl font-bold text-slate-900 mb-3">
-                Thank You! 🎉
-              </h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-3">Thank You! 🎉</h2>
               
               <p className="text-lg text-slate-600 mb-2">
-                Your {selectedPartnerType === "channel" ? "Channel" : "Sales"} Partner application has been submitted successfully!
+                Your {selectedPartnerType === "channel" ? "Channel" : "Sales"} Partner application has been submitted!
               </p>
               
               <p className="text-slate-500 mb-8">
-                Our partnership team will review your application and get back to you within 1-2 business days.
+                Our team will review your application and get back within 1-2 business days.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  onClick={resetForm}
-                  className="rounded-xl"
-                >
+                <Button variant="outline" size="lg" onClick={resetForm} className="rounded-xl">
                   Submit Another Application
                 </Button>
-                <Button 
-                  size="lg" 
-                  onClick={() => window.location.href = "/"}
-                  className="rounded-xl"
-                >
+                <Button size="lg" onClick={() => window.location.href = "/"} className="rounded-xl">
                   Back to Home
                 </Button>
               </div>
@@ -1572,14 +847,6 @@ export default function ChannelPartnerPremiumPage() {
           )}
         </AnimatePresence>
       </div>
-
-      {/* Click outside to close dropdowns */}
-      {(showCountryDropdown || showCityDropdown || showBusinessTypeDropdown) && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={closeAllDropdowns}
-        />
-      )}
     </div>
   );
 }

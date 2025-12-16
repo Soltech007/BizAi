@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
     console.log("📥 Incoming Data:", JSON.stringify(body, null, 2));
 
-    // 1. Validation
+    // Validation
     if (!body.companyName || !body.contactPerson || !body.email || !body.phone) {
       return NextResponse.json(
         { error: "Required fields missing (Name, Email, Phone, Company)" },
@@ -43,38 +43,47 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (body.phone.length !== 10) {
+    // 🆕 Updated Phone Validation for International Numbers
+    // Extract only digits from phone (remove +, spaces, etc.)
+    const phoneDigitsOnly = body.phone.replace(/\D/g, '');
+    
+    // International phone numbers can be 7-15 digits
+    if (phoneDigitsOnly.length < 7 || phoneDigitsOnly.length > 15) {
       return NextResponse.json(
-        { error: "Phone number must be 10 digits" },
+        { error: "Please enter a valid phone number (7-15 digits)" },
         { status: 400 }
       );
     }
 
-    // 2. ✅ NAME SPLIT LOGIC (Ye Full Name fix karega)
-    const fullName = body.contactPerson.trim();
-    const nameParts = fullName.split(" ");
-    const firstName = nameParts[0];
-    const lastName = nameParts.slice(1).join(" ") || ""; // Baaki ka hissa Last Name banega
-
-    // 3. Address Combine
+    // Address Combine
     const fullAddress = [
       body.address,
       body.city ? `City: ${body.city}` : null,
       body.state ? `State: ${body.state}` : null,
-      body.pincode ? `Pincode: ${body.pincode}` : null
+      body.pincode ? `Pincode: ${body.pincode}` : null,
+      body.country ? `Country: ${body.country}` : null, // 🆕 Added Country
     ].filter(Boolean).join(", ");
 
-    // 4. ERP Payload
+    // 🆕 Format phone number for ERP
+    // body.phone already includes country code like "+919876543210"
+    const formattedPhone = body.phone; // Full number with ISD
+    const countryCode = body.countryCode || "+91"; // e.g., "+91"
+    const countryName = body.country || "India"; // e.g., "India"
+
+    // ERP Payload
     const payload: Record<string, any> = {
-      lead_name: fullName,      // Full Name
-      first_name: firstName,    // Pehla Naam
-      last_name: lastName,      // Aakhri Naam (Added this)
-      
+      lead_name: body.contactPerson,
+      first_name: body.contactPerson.split(' ')[0],
       company_name: body.companyName,
       email_id: body.email,
-      mobile_no: body.phone,
-      phone: body.phone,
-      whatsapp_no: body.phone,
+      
+      // 🆕 Phone with ISD Code
+      mobile_no: formattedPhone,
+      phone: formattedPhone,
+      whatsapp_no: formattedPhone,
+      
+      // 🆕 Country Info
+      country: countryName,
       
       city: body.city || "",
       state: body.state || "",
@@ -86,13 +95,14 @@ export async function POST(req: NextRequest) {
       custom_lead_interest: "AIBIZHACKS",
       custom_redirect_form: body.source || "AI Calling Agent - Ads Campaign",
       
-      lead_source_details: `INTEREST: AI Calling Agent | Address Details: ${fullAddress}`,
+      // 🆕 Enhanced lead source details
+      lead_source_details: `INTEREST: AI Calling Agent | Country: ${countryName} (${countryCode}) | Address: ${fullAddress}`,
       lead_owner: "lead@Bizaihacks.com",
     };
 
     // Remove empty keys
     Object.keys(payload).forEach((key) => {
-      if (!payload[key] && payload[key] !== "") delete payload[key];
+      if (!payload[key]) delete payload[key];
     });
 
     console.log("📤 Sending Payload to ERP:", JSON.stringify(payload, null, 2));
@@ -108,43 +118,41 @@ export async function POST(req: NextRequest) {
 
     const data = await response.json();
 
-    // 5. Handle Errors & Suppress Automation Errors
+    // Handle Errors & Suppress WhatsApp/Mail Errors
     if (!response.ok) {
-        const errorMsg = parseErrorMessage(data);
-        console.error("❌ ERP Error Raw:", errorMsg);
+      const errorMsg = parseErrorMessage(data);
+      console.error("❌ ERP Error Raw:", errorMsg);
 
-        // ✅ FIX: Ignore WhatsApp/Automation specific errors
-        const ignoredErrors = [
-            "Connection refused",
-            "Outgoing Mail Server",
-            "WhatsApp",
-            "Message Triggered",
-            "Triggered",
-            "Contact ID" // Ye wala naya error bhi ignore hoga
-        ];
+      const ignoredErrors = [
+        "Connection refused",
+        "Outgoing Mail Server",
+        "WhatsApp",
+        "Message Triggered",
+        "Triggered"
+      ];
 
-        const isIgnorableError = ignoredErrors.some(err => errorMsg.includes(err));
+      const isIgnorableError = ignoredErrors.some(err => errorMsg.includes(err));
 
-        if (isIgnorableError) {
-            console.log("⚠️ Ignoring Automation Error - Lead assumed created.");
-            return NextResponse.json(
-                { success: true, message: "Lead created (Automation Failed but Data Saved)" },
-                { status: 200 }
-            );
-        }
-
-        // Handle Duplicate
-        if(response.status === 409) {
-             return NextResponse.json(
-                { success: true, message: "Lead already exists (Duplicate)" },
-                { status: 200 }
-            );
-        }
-
+      if (isIgnorableError) {
+        console.log("⚠️ Ignoring Automation Error - Lead assumed created.");
         return NextResponse.json(
-            { error: errorMsg, details: data },
-            { status: response.status }
+          { success: true, message: "Lead created (Automation Failed but Data Saved)" },
+          { status: 200 }
         );
+      }
+
+      // Handle Duplicate
+      if (response.status === 409) {
+        return NextResponse.json(
+          { success: true, message: "Lead already exists (Duplicate)" },
+          { status: 200 }
+        );
+      }
+
+      return NextResponse.json(
+        { error: errorMsg, details: data },
+        { status: response.status }
+      );
     }
 
     return NextResponse.json(
