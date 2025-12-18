@@ -31,14 +31,12 @@ function parseErrorMessage(data: any): string {
 
 // ✅ GST Validation Function
 function validateGSTNumber(gst: string): { valid: boolean; message: string } {
-  // If empty, it's optional - return valid
   if (!gst || gst.trim() === "") {
     return { valid: true, message: "" };
   }
 
   const gstNumber = gst.trim().toUpperCase();
 
-  // Check length - exactly 15 characters
   if (gstNumber.length !== 15) {
     return { 
       valid: false, 
@@ -46,14 +44,6 @@ function validateGSTNumber(gst: string): { valid: boolean; message: string } {
     };
   }
 
-  // ✅ Optional: Full GST format validation (Indian GST format)
-  // Format: 22AAAAA0000A1Z5
-  // - First 2: State Code (01-37)
-  // - Next 10: PAN Number
-  // - 13th: Entity Number (1-9 or A-Z)
-  // - 14th: 'Z' by default
-  // - 15th: Check digit (alphanumeric)
-  
   const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
   
   if (!gstRegex.test(gstNumber)) {
@@ -63,7 +53,6 @@ function validateGSTNumber(gst: string): { valid: boolean; message: string } {
     };
   }
 
-  // Validate state code (01 to 37)
   const stateCode = parseInt(gstNumber.substring(0, 2), 10);
   if (stateCode < 1 || stateCode > 37) {
     return { 
@@ -89,7 +78,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // ✅ GST Number Validation
+    // GST Number Validation
     if (body.gstNumber) {
       const gstValidation = validateGSTNumber(body.gstNumber);
       if (!gstValidation.valid) {
@@ -102,24 +91,17 @@ export async function POST(req: NextRequest) {
 
     // Build detailed info string for notes
     const detailedInfo = [
-      `Partner Category: ${body.partnerCategory || "N/A"}`,
+      `Partner Category: ${body.partnerCategory || "Channel Partner"}`,
       body.whatsappNo ? `WhatsApp: ${body.whatsappNo}` : null,
       body.website ? `Website: ${body.website}` : null,
       body.noOfEmployees ? `Employees: ${body.noOfEmployees}` : null,
       body.gstNumber ? `GST: ${body.gstNumber.toUpperCase()}` : null,
-      body.panNumber ? `PAN: ${body.panNumber}` : null,
-      body.natureOfBusiness ? `Nature: ${body.natureOfBusiness}` : null,
-      body.estimatedBusiness ? `Est. Business: ${body.estimatedBusiness}` : null,
-      body.individualOrCompany ? `Type: ${body.individualOrCompany}` : null,
-      body.salesExperience ? `Experience: ${body.salesExperience}` : null,
-      body.preferredSalesArea ? `Sales Area: ${body.preferredSalesArea}` : null,
-      body.leadGenerationMethods ? `Lead Methods: ${body.leadGenerationMethods}` : null,
-      body.bankName ? `Bank: ${body.bankName}` : null,
+      body.industry ? `Industry: ${body.industry}` : null,
       body.city ? `City: ${body.city}` : null,
       body.state ? `State: ${body.state}` : null,
     ].filter(Boolean).join(" | ");
 
-    // ERP Payload
+    // ✅ ERP Payload - REMOVED problematic fields
     const payload: Record<string, any> = {
       // Name
       first_name: body.firstName,
@@ -134,27 +116,31 @@ export async function POST(req: NextRequest) {
       // Company
       company_name: body.company || "",
       website: body.website || "",
-      industry: body.industry || "",
+      
+      // ❌ REMOVED: industry - causing error (not matching ERP values)
+      // If you want to include industry, first check valid values at:
+      // https://erp.soltechtechservices.com/app/industry-type
+      
       no_of_employees: body.noOfEmployees || "",
 
       // Location
       city: body.city || "",
       state: body.state || "",
 
-      // ✅ GST Number (uppercase)
+      // GST Number
       custom_gstin: body.gstNumber ? body.gstNumber.toUpperCase() : "",
 
       // Source & Status
       source: "Website",
       status: "Lead",
       custom_lead_interest: "AIBIZHACKS",
-      custom_redirect_form: body.source || "Partner Application Form",
+      custom_redirect_form: body.source || "Channel Partner Application Form",
 
-      // Notes
+      // Notes - Store ALL info here including industry
       lead_source_details: detailedInfo,
 
-      // Owner
-      lead_owner: "lead@Bizaihacks.com",
+      // ❌ REMOVED: lead_owner - causing error (user doesn't exist)
+      // lead_owner: "lead@Bizaihacks.com",
     };
 
     // Remove empty keys
@@ -180,7 +166,7 @@ export async function POST(req: NextRequest) {
       console.error("❌ ERP Error:", errorMsg);
 
       // Ignore automation errors
-      const ignoredErrors = ["Connection refused", "Outgoing Mail Server", "WhatsApp", "Message Triggered", "Triggered"];
+      const ignoredErrors = ["Connection refused", "Outgoing Mail Server", "WhatsApp", "Message Triggered","Please Check Whatsapp Software and Update Contact ID From Their And Link into the contact.", "Triggered"];
       const isIgnorableError = ignoredErrors.some(err => errorMsg.includes(err));
 
       if (isIgnorableError) {
