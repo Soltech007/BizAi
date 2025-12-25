@@ -38,7 +38,7 @@ const footerLinks = {
 const socialLinks = [
   { name: "Twitter", href: "#", Icon: Twitter, ariaLabel: "Follow BizAI Hacks on Twitter" },
   { name: "LinkedIn", href: "https://www.linkedin.com/company/bizaihacks/", Icon: Linkedin, ariaLabel: "Follow BizAI Hacks on LinkedIn" },
-  { name: "Instagram", href: "#", Icon: FaInstagram, ariaLabel: "Follow BizAI Hacks on Instagram" },
+  { name: "Instagram", href: "https://www.instagram.com/bizaihacks/", Icon: FaInstagram, ariaLabel: "Follow BizAI Hacks on Instagram" },
   { name: "Facebook", href: "https://www.facebook.com/bizaihacks/", Icon: FaFacebook, ariaLabel: "Follow BizAI Hacks on Facebook" },
 ];
 
