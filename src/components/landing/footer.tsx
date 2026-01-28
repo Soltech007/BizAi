@@ -322,7 +322,7 @@ export default function Footer() {
             className="text-center md:text-left"
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
-            &copy; {new Date().getFullYear()} BizAI Hacks. A division of{" "}
+            &copy; {new Date().getFullYear()} BizAI Hacks. A Vertical of{" "}
             <Link 
               href="https://soltechtechservices.com"
               target="_blank"

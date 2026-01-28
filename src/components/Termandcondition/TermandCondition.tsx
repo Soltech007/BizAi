@@ -33,7 +33,7 @@ export default function TermsPage() {
           <div className="mb-12 p-6 rounded-lg border-2" style={{ borderColor: 'hsl(var(--border))' }}>
             <p className="text-lg leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
               Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using 
-              the <strong>SoltechTech Services Pvt Ltd</strong> website (the "Website") operated by SoltechTech Services Pvt Ltd 
+              the <strong>BizAiHacks</strong> website (the "Website") operated by SoltechTech Services Pvt Ltd 
               ("us", "we", or "our"). These Terms apply to all visitors, users, and others who access or use the Website.
             </p>
           </div>
