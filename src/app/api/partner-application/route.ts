@@ -101,47 +101,44 @@ export async function POST(req: NextRequest) {
       body.state ? `State: ${body.state}` : null,
     ].filter(Boolean).join(" | ");
 
-    // ✅ ERP Payload - REMOVED problematic fields
-    const payload: Record<string, any> = {
-      // Name
-      first_name: body.firstName,
-      last_name: body.lastName || "",
-      lead_name: `${body.firstName} ${body.lastName || ""}`.trim(),
+  const isChannelPartner = body.partnerCategory === "Channel Partner";
 
-      // Contact
-      email_id: body.email,
-      mobile_no: body.phone || "",
-      phone: body.whatsappNo || "", 
+const payload: Record<string, any> = {
+  // Mandatory
+  partner_name: `${body.firstName} ${body.lastName || ""}`.trim(),
 
-      // Company
-      company_name: body.company || "",
-      website: body.website || "",
-      
-      // ❌ REMOVED: industry - causing error (not matching ERP values)
-      // If you want to include industry, first check valid values at:
-      // https://erp.soltechtechservices.com/app/industry-type
-      
-      no_of_employees: body.noOfEmployees || "",
+  // 🔥 DYNAMIC PARTNER TYPE
+  partner_type: isChannelPartner ? "Channel Partner" : "Sales Partner",
+  territory: "India",
 
-      // Location
-      city: body.city || "",
-      state: body.state || "",
+  // Custom business fields
+  custom_organization_name: body.company || "",
+  custom_industry: body.industry || "",
 
-      // GST Number
-      custom_gstin: body.gstNumber ? body.gstNumber.toUpperCase() : "",
+  // Custom contact fields
+  custom_phone: body.phone,
+  custom_email: body.email,
+  website: body.website || "",
 
-      // Source & Status
-      source: "Website",
-      status: "Lead",
-      custom_lead_interest: "AIBIZHACKS",
-      custom_redirect_form: body.source || "Channel Partner Application Form",
+  // Custom location
+  custom_state: body.state || "",
+  custom_city: body.city || "",
 
-      // Notes - Store ALL info here including industry
-      lead_source_details: detailedInfo,
+  // 🔥 DYNAMIC COMMISSION
+  custom_gstin: body.gstNumber ? body.gstNumber.toUpperCase() : "",
+  commission_rate: isChannelPartner ? 40 : 25,
 
-      // ❌ REMOVED: lead_owner - causing error (user doesn't exist)
-      // lead_owner: "lead@Bizaihacks.com",
-    };
+  // Tracking
+  custom_lead_interest: "AIBIZHACKS",
+  custom_source: "Website",
+  custom_redirect_form: body.source || "Partner Application Form",
+
+  // Extra info
+  description: detailedInfo,
+};
+
+
+
 
     // Remove empty keys
     Object.keys(payload).forEach((key) => {
@@ -150,16 +147,22 @@ export async function POST(req: NextRequest) {
 
     console.log("📤 Sending to ERP:", JSON.stringify(payload, null, 2));
 
-    const response = await fetch(`${ERP_CONFIG.url}/api/resource/Lead`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `token ${ERP_CONFIG.apiKey}:${ERP_CONFIG.apiSecret}`,
-      },
-      body: JSON.stringify(payload),
-    });
+  const response = await fetch(
+  `${ERP_CONFIG.url}/api/resource/Sales Partner`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `token ${ERP_CONFIG.apiKey}:${ERP_CONFIG.apiSecret}`,
+    },
+    body: JSON.stringify(payload),
+  }
+);
+
 
     const data = await response.json();
+    console.log("ERP RAW RESPONSE:", JSON.stringify(data, null, 2));
+
 
     if (!response.ok) {
       const errorMsg = parseErrorMessage(data);
