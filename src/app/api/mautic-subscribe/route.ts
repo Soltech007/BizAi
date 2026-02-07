@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+    
 
     const username = process.env.MAUTIC_USERNAME!;
     const password = process.env.MAUTIC_PASSWORD!;
