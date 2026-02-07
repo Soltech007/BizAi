@@ -46,48 +46,52 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [subscribeStatus, setSubscribeStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  
+const handleSubscribe = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
+  if (!email) {
+    toast.error("Please enter your email");
+    return;
+  }
 
-    if (!email) {
-      toast.error("Please enter your email");
-      return;
-    }
+  setLoading(true);
 
-    setLoading(true);
+  try {
+    const response = await fetch("/api/mautic-subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        tag: "BizAiHacks_website_subscribe_button",
+      }),
+    });
 
-    try {
-      const response = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+    const data = await response.json();
+
+    if (response.ok) {
+      setSubscribeStatus("success");
+      toast.success("Subscribed successfully 🎉", {
+        position: "top-center",
+        icon: "✅",
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSubscribeStatus('success');
-        toast.success("Subscribed successfully 🎉", {
-          position: "top-center",
-          icon: "✅",
-        });
-        setEmail("");
-        setTimeout(() => setSubscribeStatus('idle'), 5000);
-      } else {
-        setSubscribeStatus('error');
-        toast.error(data.error || "Failed to subscribe");
-        setTimeout(() => setSubscribeStatus('idle'), 5000);
-      }
-    } catch (err) {
-      console.error(err);
-      setSubscribeStatus('error');
-      toast.error("Something went wrong");
-      setTimeout(() => setSubscribeStatus('idle'), 5000);
-    } finally {
-      setLoading(false);
+      setEmail("");
+      setTimeout(() => setSubscribeStatus("idle"), 5000);
+    } else {
+      setSubscribeStatus("error");
+      toast.error(data.error || "Failed to subscribe");
+      setTimeout(() => setSubscribeStatus("idle"), 5000);
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setSubscribeStatus("error");
+    toast.error("Something went wrong");
+    setTimeout(() => setSubscribeStatus("idle"), 5000);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <footer
