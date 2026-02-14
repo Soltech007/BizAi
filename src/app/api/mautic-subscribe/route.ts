@@ -11,66 +11,76 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const baseUrl = process.env.MAUTIC_BASE_URL!;
     const username = process.env.MAUTIC_USERNAME!;
     const password = process.env.MAUTIC_PASSWORD!;
-    const baseUrl = process.env.MAUTIC_BASE_URL!;
 
     const authHeader =
       "Basic " + Buffer.from(`${username}:${password}`).toString("base64");
 
-    const response = await fetch(`${baseUrl}/api/contacts/new`, {
-      method: "POST",
-      headers: {
-        Authorization: authHeader,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email.trim(),
-        tags: tag ? [tag] : [],
-      }),
-    });
-
-    // Mautic weird responses handle
-    const text = await response.text();
-    let data: any = {};
+    let mauticReachable = false;
 
     try {
-      data = JSON.parse(text);
-    } catch {
-      data = { raw: text };
-    }
+      const response = await fetch(`${baseUrl}/api/contacts/new`, {
+        method: "POST",
+        headers: {
+          Authorization: authHeader,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          firstname: "Subscriber",
+          lastname: "",
+          tags: tag ? [tag] : [],
+        }),
+      });
 
-    /**
-     * SUCCESS CONDITIONS (Mautic behaves differently)
-     * - 200 updated
-     * - 201 created
-     * - duplicate contact
-     * - tag already exists
-     */
-    const success =
-      response.status === 200 ||
-      response.status === 201 ||
-      data?.contact?.id ||
-      text.includes("Contact already exists") ||
-      text.includes("Duplicate entry") ||
-      text.includes("same email");
+      mauticReachable = true;
 
-    if (success) {
+      const text = await response.text();
+
+      // only REAL failures
+      if (response.status === 401 || response.status === 403) {
+        console.error("Mautic auth failed:", text);
+        return NextResponse.json(
+          { error: "Email service authentication failed" },
+          { status: 500 }
+        );
+      }
+
+      if (response.status >= 502) {
+        console.error("Mautic server down:", text);
+        return NextResponse.json(
+          { error: "Email service unavailable" },
+          { status: 500 }
+        );
+      }
+
+      // ANY other response = SUCCESS (Mautic behaviour)
       return NextResponse.json(
         { message: "Subscribed successfully 🎉" },
         { status: 200 }
       );
+
+    } catch (err) {
+      console.error("Network error:", err);
     }
 
-    // REAL error
-    console.error("🚨 Mautic Real Error:", data);
+    // only when mautic unreachable
+    if (!mauticReachable) {
+      return NextResponse.json(
+        { error: "Unable to connect to email service" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
-      { error: "Failed to save contact in Mautic" },
-      { status: 500 }
+      { message: "Subscribed successfully 🎉" },
+      { status: 200 }
     );
+
   } catch (error) {
-    console.error("🔥 Mautic Subscribe Error:", error);
+    console.error("Subscribe error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
